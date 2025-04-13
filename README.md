@@ -1,1 +1,0 @@
-# Equaty-Tracker-Native
