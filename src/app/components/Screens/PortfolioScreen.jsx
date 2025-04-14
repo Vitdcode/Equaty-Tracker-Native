@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 
-function HomeScreen() {
+function PortfolioScreen() {
   const { count, increment, decrement } = useCounterStore();
   const { text, setText } = useTextStore();
   const theme = useTheme();
@@ -19,7 +19,7 @@ function HomeScreen() {
       }}
     >
       <LinearGradient
-        colors={["#6e8efb", "#a777e3"]}
+        colors={["rgb(144, 98, 250)", "rgb(141, 95, 247)"]}
         start={{ x: 0, y: 0 }} // Top-left
         end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
         style={{
@@ -50,18 +50,18 @@ function HomeScreen() {
         <CustomIconBtnWithText
           onPress={() => setText("Add Entry")}
           icon={() => <MaterialCommunityIcons name="plus" size={24} color="white" />}
-          text={"Add Entry"}
+          text={"Neuer Eintrag"}
         />
         <CustomIconBtnWithText
           onPress={() => setText("Goal")}
           icon={() => <MaterialCommunityIcons name="bullseye" size={24} color="white" />}
-          text={"Goal"}
+          text={"Ziel"}
         />
 
         <CustomIconBtnWithText
           onPress={() => setText("History")}
           icon={() => <MaterialCommunityIcons name="history" size={24} color="white" />}
-          text={"History"}
+          text={"Verlauf"}
         />
       </View>
       <Text style={{ marginTop: 80 }}>{text}</Text>
@@ -69,4 +69,4 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default PortfolioScreen;

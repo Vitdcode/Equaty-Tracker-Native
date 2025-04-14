@@ -9,15 +9,10 @@ import * as NavigationBar from "expo-navigation-bar";
 import Colors from "../constants/Colors.js";
 import merge from "deepmerge";
 import { useEffect } from "react";
-import HomeScreen from "./components/Screens/HomeScreen.jsx";
-
-function ProfileScreen() {
-  return (
-    <View style={styles.screenContainer}>
-      <Text>Profile Screen</Text>
-    </View>
-  );
-}
+import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import PortfolioScreen from "./components/Screens/PortfolioScreen.jsx";
+import StatisticsScreen from "./components/Screens/StatisticsScreen.jsx";
+import BudgetScreen from "./components/Screens/BudgetScreen.jsx";
 
 function SettingsScreen() {
   return (
@@ -35,7 +30,6 @@ export default function App() {
 
   const theme = colorScheme === "dark" ? CombinedDarkTheme : CombinedLightTheme;
   const Tab = createBottomTabNavigator();
-  console.log(theme.colors.background);
 
   useEffect(() => {
     const setNavBarTransparent = async () => {
@@ -57,6 +51,7 @@ export default function App() {
           <Tab.Navigator
             screenOptions={{
               headerShown: false,
+              animation: "fade",
             }}
             tabBar={({ navigation, state, descriptors, insets }) => (
               <BottomNavigation.Bar
@@ -82,33 +77,56 @@ export default function App() {
                   return options.tabBarLabel || route.name;
                 }}
                 style={{ backgroundColor: theme.colors.lightGray }}
+                activeIndicatorStyle={{ backgroundColor: theme.colors.secondary }}
               />
             )}
           >
             <Tab.Screen
-              name="Home"
-              component={HomeScreen}
+              name="Portfolio"
+              component={PortfolioScreen}
               options={{
                 tabBarIcon: ({ color, focused }) => (
-                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>🏠</Text>
+                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>
+                    {
+                      <MaterialIcons
+                        name="attach-money"
+                        size={24}
+                        color={focused ? "white" : theme.colors.gray}
+                      />
+                    }
+                  </Text>
                 ),
               }}
             />
             <Tab.Screen
-              name="Profile"
-              component={ProfileScreen}
+              name="Statistiken"
+              component={StatisticsScreen}
               options={{
                 tabBarIcon: ({ color, focused }) => (
-                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>👤</Text>
+                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>
+                    <MaterialIcons
+                      name="table-chart"
+                      size={24}
+                      color={focused ? "white" : theme.colors.gray}
+                    />
+                  </Text>
                 ),
               }}
             />
             <Tab.Screen
-              name="Settings"
-              component={SettingsScreen}
+              name="Budget"
+              component={BudgetScreen}
               options={{
                 tabBarIcon: ({ color, focused }) => (
-                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>⚙️</Text>
+                  <Text style={{ color, fontWeight: focused ? "bold" : "normal" }}>
+                    {
+                      <FontAwesome5
+                        name="money-check-alt"
+                        size={24}
+                        color={focused ? "white" : theme.colors.gray}
+                      />
+                    }
+                  </Text>
                 ),
               }}
             />
