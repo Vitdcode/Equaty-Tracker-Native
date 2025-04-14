@@ -1,8 +1,8 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { View } from "react-native";
-import { Button, IconButton, Text, useTheme } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
+import { Text, useTheme } from "react-native-paper";
 import useCounterStore, { useTextStore } from "../../zustand/store";
-import LinearGradient from "react-native-linear-gradient";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 
 function PortfolioScreen() {
@@ -19,7 +19,7 @@ function PortfolioScreen() {
       }}
     >
       <LinearGradient
-        colors={["rgb(144, 98, 250)", "rgb(141, 95, 247)"]}
+        colors={["#5F0A87", "#A4508B"]}
         start={{ x: 0, y: 0 }} // Top-left
         end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
         style={{
