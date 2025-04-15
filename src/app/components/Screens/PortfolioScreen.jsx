@@ -6,7 +6,6 @@ import useCounterStore, { useTextStore } from "../../zustand/store";
 import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 
 function PortfolioScreen() {
-  const { count, increment, decrement } = useCounterStore();
   const { text, setText } = useTextStore();
   const theme = useTheme();
   return (
@@ -19,27 +18,27 @@ function PortfolioScreen() {
       }}
     >
       <LinearGradient
-        colors={["#5F0A87", "#A4508B"]}
+        colors={["rgb(144, 98, 250)", "rgb(141, 95, 247)"]}
         start={{ x: 0, y: 0 }} // Top-left
         end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
         style={{
-          height: "30%",
+          height: "25%",
           width: "100%",
           position: "relative",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold", marginTop: 60 }}> Current Balance</Text>
-        <Text variant="titleLarge" style={{ color: "white", fontWeight: "bold" }}>
-          $25.000
+        <Text style={{ color: "white", fontWeight: "bold", marginTop: 50 }}>Portfolio</Text>
+        <Text variant="headlineMedium" style={{ color: "white", fontWeight: "bold" }}>
+          25.000€
         </Text>
       </LinearGradient>
       <View
         style={{
           position: "absolute",
-          top: 200,
-          backgroundColor: theme.colors.background,
+          top: 170,
+          backgroundColor: theme.colors.elevation.level1,
           elevation: 5,
           flexDirection: "row",
           borderRadius: 10,
