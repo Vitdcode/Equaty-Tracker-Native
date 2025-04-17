@@ -18,7 +18,7 @@ function PortfolioScreen() {
       }}
     >
       <LinearGradient
-        colors={["rgb(144, 98, 250)", "rgb(141, 95, 247)"]}
+        colors={["rgba(79, 196, 141, 0.58)", "rgba(49, 185, 155, 0.6)"]}
         start={{ x: 0, y: 0 }} // Top-left
         end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
         style={{
@@ -27,10 +27,11 @@ function PortfolioScreen() {
           position: "relative",
           justifyContent: "center",
           alignItems: "center",
+          gap: 5,
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold", marginTop: 50 }}>Portfolio</Text>
-        <Text variant="headlineMedium" style={{ color: "white", fontWeight: "bold" }}>
+        <Text style={{ color: "white", fontWeight: "bold", marginTop: 10 }}>Portfolio</Text>
+        <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
           25.000€
         </Text>
       </LinearGradient>

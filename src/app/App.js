@@ -1,8 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Easing, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, PaperProvider, ThemeProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  createBottomTabNavigator,
+  SceneStyleInterpolators,
+  TransitionSpecs,
+} from "@react-navigation/bottom-tabs";
 import { BottomNavigation } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as NavigationBar from "expo-navigation-bar";
@@ -13,6 +17,7 @@ import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vecto
 import PortfolioScreen from "./components/Screens/PortfolioScreen.jsx";
 import StatisticsScreen from "./components/Screens/StatisticsScreen.jsx";
 import BudgetScreen from "./components/Screens/BudgetScreen.jsx";
+import * as SystemUI from "expo-system-ui";
 
 function SettingsScreen() {
   return (
@@ -44,6 +49,8 @@ export default function App() {
     setNavBarTransparent();
   }, [theme]);
 
+  SystemUI.setBackgroundColorAsync(theme.colors.background);
+
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
@@ -51,10 +58,11 @@ export default function App() {
           <Tab.Navigator
             screenOptions={{
               headerShown: false,
-              animation: "fade",
+              animation: "none",
             }}
             tabBar={({ navigation, state, descriptors, insets }) => (
               <BottomNavigation.Bar
+                animationEasing={Easing.inOut(Easing.ease)}
                 navigationState={state}
                 safeAreaInsets={insets}
                 onTabPress={({ route, preventDefault }) => {
@@ -114,7 +122,7 @@ export default function App() {
               }}
             />
             <Tab.Screen
-              name="Budget"
+              name="Ausgaben"
               component={BudgetScreen}
               options={{
                 tabBarIcon: ({ color, focused }) => (
@@ -134,7 +142,7 @@ export default function App() {
           <StatusBar
             translucent={true}
             style={theme.dark ? "light" : "dark"} // Auto-detects from theme
-            backgroundColor="rgba(158, 158, 158, 0.4)"
+            backgroundColor="rgba(158, 158, 158, 0.15)"
           />
         </NavigationContainer>
       </PaperProvider>

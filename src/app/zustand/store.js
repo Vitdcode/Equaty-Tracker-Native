@@ -11,26 +11,42 @@ export const useTextStore = create((set) => ({
   setText: (newText) => set({ text: newText }),
 }));
 
+export const useMoneyStore = create((set) => ({
+  income: 2700,
+  isIncomeEdit: false,
+  setIsIncomeEdit: () => set((state) => ({ isIncomeEdit: !state.isIncomeEdit })),
+  setIncome: (newIncome) => set((state) => ({ income: newIncome })),
+}));
+
 export const useFixCostsStore = create((set, get) => ({
-  fixCosts: [{ rent: "675.05€", power: "50.00€" }],
+  fixCosts: [
+    { name: "Miete", cost: "675.05" },
+    { name: "Strom", cost: "50.00" },
+  ],
   setRent: (fixCosts) =>
     set((state) => ({
       fixCosts: state.fixCosts.map((prev) =>
         prev.id === fixCosts.id ? { ...fixCosts, rent: fixCosts.rent } : fixCosts
       ),
     })),
+
+  setNewFixCost: (name, value) =>
+    set((state) => ({
+      fixCosts: [...state.fixCosts, { name: name, cost: value }],
+    })),
+
   sum: () => {
     const { fixCosts } = get();
     let total = 0;
 
     fixCosts.forEach((item) => {
-      Object.values(item).forEach((val) => {
-        const num = parseFloat(val.replace("€", "").trim());
-        total += num;
-      });
+      const num = item.cost.includes(",")
+        ? parseFloat(item.cost.replace(",", "."))
+        : parseFloat(item.cost);
+      total += num;
     });
 
-    return `${total}€`;
+    return total;
   },
 }));
 

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Keyboard } from "react-native";
 import {
   Button,
   Card,
@@ -12,16 +12,20 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 import { FontAwesome6, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
-import { useFixCostsStore } from "../../zustand/store";
+import { useEffect, useState } from "react";
+import { useFixCostsStore, useMoneyStore } from "../../zustand/store";
 import FixCostItem from "../reusable components/FixCostItems";
+import { useIsFocused } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import CustomIconButton from "../reusable components/CustomIconButton";
 
 const BudgetScreen = () => {
   const theme = useTheme();
   const [editFixCosts, setEditFixCosts] = useState(false);
   const fixCosts = useFixCostsStore((state) => state.fixCosts);
   const sumFixedCosts = useFixCostsStore((state) => state.sum());
-  const [income, setIncome] = useState(2700);
+  const [newFixCostTextInputIsVisible, setNewFixCostTextInputIsVisible] = useState(false);
+  const { income, setIncome, isIncomeEdit, setIsIncomeEdit } = useMoneyStore();
 
   return (
     <View
@@ -33,7 +37,7 @@ const BudgetScreen = () => {
       }}
     >
       <LinearGradient
-        colors={["rgb(144, 98, 250)", "rgb(141, 95, 247)"]}
+        colors={["rgba(79, 196, 141, 0.58)", "rgba(49, 185, 155, 0.6)"]}
         start={{ x: 0, y: 0 }} // Top-left
         end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
         style={{
@@ -42,43 +46,98 @@ const BudgetScreen = () => {
           position: "relative",
           justifyContent: "center",
           alignItems: "center",
+          gap: 5,
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold", marginTop: 60 }}>Verdienst</Text>
-        <Text variant="headlineMedium" style={{ color: "white", fontWeight: "bold" }}>
-          {`${income}€`}
+        <Text variant="titleMedium" style={{ color: "white", fontWeight: "bold", marginTop: 25 }}>
+          Verdienst
         </Text>
+        {!isIncomeEdit ? (
+          <Text variant="displaySmall" style={{ color: "white", fontWeight: "bold" }}>
+            {`${income}€`}
+          </Text>
+        ) : (
+          <TextInput
+            /*    mode="outlined" */
+            label="Verdienst anpassen"
+            value={income}
+            onChangeText={setIncome}
+            returnKeyType="send"
+            /*       onSubmitEditing={}  send to backend for later*/
+            style={{ width: "40%" }}
+          />
+        )}
       </LinearGradient>
+      {isIncomeEdit ? (
+        <CustomIconButton icon={"check"} onPress={setIsIncomeEdit} />
+      ) : (
+        <CustomIconButton icon={"pencil"} onPress={setIsIncomeEdit} />
+      )}
 
-      <View
-        style={{
-          position: "absolute",
-          top: 170,
-          backgroundColor: theme.colors.background,
-          elevation: 5,
-          flexDirection: "row",
-          borderRadius: 10,
-          padding: 10,
-          gap: 20,
-        }}
+      <KeyboardAwareScrollView
+        style={{ flex: 1, width: "100%" }}
+        contentContainerStyle={{ paddingBottom: 30 }}
       >
-        <CustomIconBtnWithText
-          onPress={() => setText("Add Entry")}
-          icon={() => <MaterialCommunityIcons name="plus" size={24} color="white" />}
-          text={"Neuer Eintrag"}
-        />
-      </View>
-      <View style={{ marginTop: 90, position: "relative", width: "80%", gap: 20 }}>
-        <MoneyLeftCard sumFixedCosts={sumFixedCosts} income={income} theme={theme} />
-        <FixCostsCard fixCosts={fixCosts} sumFixedCosts={sumFixedCosts} theme={theme} />
-      </View>
+        <View
+          style={{
+            marginTop: 90,
+            position: "relative",
+            width: "85%",
+            gap: 20,
+            marginHorizontal: "auto",
+          }}
+        >
+          <MoneyLeftCard sumFixedCosts={sumFixedCosts} income={income} theme={theme} />
+          <FixCostsCard
+            fixCosts={fixCosts}
+            sumFixedCosts={sumFixedCosts}
+            theme={theme}
+            newFixCostTextInputIsVisible={newFixCostTextInputIsVisible}
+            setNewFixCostTextInputIsVisible={setNewFixCostTextInputIsVisible}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
 
-const FixCostsCard = ({ fixCosts, sumFixedCosts, theme }) => {
+const FixCostsCard = ({
+  fixCosts,
+  sumFixedCosts,
+  theme,
+  newFixCostTextInputIsVisible,
+  setNewFixCostTextInputIsVisible,
+}) => {
+  const [fixCostEntryName, setFixCostEntryName] = useState("");
+  const [fixCostEntrySum, setFixCostEntrySum] = useState("");
+  const [error, setError] = useState("");
+  const { setNewFixCost } = useFixCostsStore();
+
+  const handleSubmitNewFixCost = () => {
+    if (newFixCostTextInputIsVisible) {
+      if (!fixCostEntryName || !fixCostEntrySum) {
+        !fixCostEntryName
+          ? setFixCostEntryName("This cannot be empty")
+          : !fixCostEntrySum
+          ? setFixCostEntrySum("This cannot be empty")
+          : "";
+        return;
+      }
+      setFixCostEntryName("");
+      setFixCostEntrySum("");
+
+      setNewFixCost(fixCostEntryName, fixCostEntrySum);
+    }
+    setNewFixCostTextInputIsVisible(!newFixCostTextInputIsVisible);
+  };
+
   return (
-    <Card style={{ padding: 5 }}>
+    <Card
+      style={{
+        padding: 5,
+        position: "relative",
+      }}
+    >
       <IconButton
         icon={() => <MaterialIcons name="edit" size={24} color={theme.colors.textColor} />}
         iconColor={theme.colors.secondary}
@@ -93,22 +152,53 @@ const FixCostsCard = ({ fixCosts, sumFixedCosts, theme }) => {
       />
       <Card.Title title="Fix Kosten" />
       <Card.Content>
-        {fixCosts?.map((cost, index) => (
-          <View key={index} style={{ marginTop: 20, gap: 10 }}>
-            <FixCostItem title={"Miete"} value={cost?.rent} />
-            <FixCostItem title={"Strom"} value={cost?.power} />
-
-            <Divider />
-            <FixCostItem title={"Summe"} value={sumFixedCosts} />
+        {fixCosts?.map((obj, index) => (
+          <View key={index} style={{ marginTop: 15, gap: 10 }}>
+            <FixCostItem name={obj?.name} value={obj?.cost} />
           </View>
         ))}
+        {newFixCostTextInputIsVisible && (
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <TextInput
+              mode="outlined"
+              label="Name"
+              value={fixCostEntryName}
+              onChangeText={setFixCostEntryName}
+              /*    onSubmitEditing={handleSubmitNewFixCost} */
+              style={{ width: "40%" }}
+            />
+            <TextInput
+              mode="outlined"
+              label="Betrag"
+              value={fixCostEntrySum}
+              onChangeText={setFixCostEntrySum}
+              /*     onSubmitEditing={handleSubmitNewFixCost} */
+              style={{ width: "40%" }}
+            />
+          </View>
+        )}
+        <Divider style={{ marginBlock: 10 }} />
+        <FixCostItem name={"Summe"} value={sumFixedCosts} />
+        <IconButton
+          icon={newFixCostTextInputIsVisible ? "check" : "plus"}
+          iconColor={theme.colors.textColor}
+          size={35}
+          onPress={handleSubmitNewFixCost}
+          style={{
+            backgroundColor: theme.colors.secondary,
+            borderRadius: 50,
+            position: "absolute",
+            bottom: -40,
+            right: 135,
+          }}
+        />
       </Card.Content>
     </Card>
   );
 };
 
 const MoneyLeftCard = ({ sumFixedCosts, income, theme }) => {
-  const sum = income - parseFloat(sumFixedCosts.replace("€", "").trim());
+  const sum = income - parseFloat(sumFixedCosts);
   return (
     <Card>
       <Card.Title title="Geld übrig nach ausgaben" />
