@@ -23,12 +23,6 @@ export const useFixCostsStore = create((set, get) => ({
     { name: "Miete", cost: "675.05" },
     { name: "Strom", cost: "50.00" },
   ],
-  setRent: (fixCosts) =>
-    set((state) => ({
-      fixCosts: state.fixCosts.map((prev) =>
-        prev.id === fixCosts.id ? { ...fixCosts, rent: fixCosts.rent } : fixCosts
-      ),
-    })),
 
   setNewFixCost: (name, value) =>
     set((state) => ({
@@ -40,6 +34,32 @@ export const useFixCostsStore = create((set, get) => ({
     let total = 0;
 
     fixCosts.forEach((item) => {
+      const num = item.cost.includes(",")
+        ? parseFloat(item.cost.replace(",", "."))
+        : parseFloat(item.cost);
+      total += num;
+    });
+
+    return total;
+  },
+}));
+
+export const useSubsStore = create((set, get) => ({
+  subs: [
+    { name: "Youtube Premium", cost: "12.99" },
+    { name: "Gym", cost: "33.9" },
+  ],
+
+  setNewSub: (name, value) =>
+    set((state) => ({
+      subs: [...state.subs, { name: name, cost: value }],
+    })),
+
+  sum: () => {
+    const { subs } = get();
+    let total = 0;
+
+    subs.forEach((item) => {
       const num = item.cost.includes(",")
         ? parseFloat(item.cost.replace(",", "."))
         : parseFloat(item.cost);

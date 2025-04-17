@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Text } from "react-native-paper";
 
-const FixCostItem = ({ name, value }) => {
+const CostItem = ({ name, value }) => {
   const num =
     typeof value != "number" && value?.includes(",")
       ? parseFloat(value.replace(",", "."))
@@ -15,4 +15,4 @@ const FixCostItem = ({ name, value }) => {
   );
 };
 
-export default FixCostItem;
+export default CostItem;
