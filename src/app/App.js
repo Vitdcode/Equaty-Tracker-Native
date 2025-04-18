@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Easing, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Easing, StyleSheet, Text, useColorScheme, View, Appearance } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, PaperProvider, ThemeProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -37,6 +37,15 @@ export default function App() {
   const Tab = createBottomTabNavigator();
 
   useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      const newTheme = colorScheme === "dark" ? CombinedDarkTheme : CombinedLightTheme;
+      SystemUI.setBackgroundColorAsync(newTheme.colors.background);
+    });
+
+    return () => subscription.remove(); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
     const setNavBarTransparent = async () => {
       try {
         NavigationBar.setPositionAsync("absolute");
@@ -48,8 +57,6 @@ export default function App() {
 
     setNavBarTransparent();
   }, [theme]);
-
-  SystemUI.setBackgroundColorAsync(theme.colors.background);
 
   return (
     <SafeAreaProvider>

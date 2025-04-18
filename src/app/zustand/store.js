@@ -29,6 +29,11 @@ export const useFixCostsStore = create((set, get) => ({
       fixCosts: [...state.fixCosts, { name: name, cost: value }],
     })),
 
+  editFixItem: (index, field, value) =>
+    set((state) => ({
+      fixCosts: state.fixCosts.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    })),
+
   sum: () => {
     const { fixCosts } = get();
     let total = 0;

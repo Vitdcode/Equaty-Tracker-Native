@@ -1,17 +1,16 @@
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Card, Divider, IconButton, Text, TextInput, useTheme } from "react-native-paper";
+import { Card, Divider, IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { useFixCostsStore, useMoneyStore, useSubsStore } from "../../zustand/store";
-import CostItem from "../reusable components/CostItem";
+import CostItem, { CostItemTextInput } from "../reusable components/CostItem";
 import CustomIconButton from "../reusable components/CustomIconButton";
 import NewCostInputs from "../reusable components/NewCostInputs";
 
 const BudgetScreen = () => {
   const theme = useTheme();
-  const [editFixCosts, setEditFixCosts] = useState(false);
 
   const { income, setIncome, isIncomeEdit, setIsIncomeEdit } = useMoneyStore();
 
@@ -109,8 +108,6 @@ const SubsCard = () => {
       setSubCostEntryName("");
       setSubCostEntrySum("");
 
-      console.log(subCostEntryName, subCostEntrySum);
-
       setNewSub(subCostEntryName, subCostEntrySum);
     }
     setNewSubCostTextInputIsVisible(!newSubCostTextInputIsVisible);
@@ -118,7 +115,7 @@ const SubsCard = () => {
 
   const handleCancelNewSub = () => {
     setNewSubCostTextInputIsVisible(!newSubCostTextInputIsVisible);
-    subCostEntryName("");
+    setSubCostEntryName("");
     setSubCostEntrySum("");
   };
 
@@ -127,9 +124,7 @@ const SubsCard = () => {
       <Card.Title title="Abos" titleStyle={{ color: theme.colors.primary }} />
       <Card.Content style={{ gap: 10 }}>
         {subs.map((subObj, index) => (
-          <View key={index} style={{ gap: 20 }}>
-            <CostItem name={subObj.name} value={subObj.cost} />
-          </View>
+          <CostItem key={index} name={subObj.name} value={subObj.cost} />
         ))}
         {newSubCostTextInputIsVisible && (
           <NewCostInputs
@@ -165,7 +160,9 @@ const SubsCard = () => {
 
 const FixCostsCard = () => {
   const theme = useTheme();
+  const [editFixCosts, setEditFixCosts] = useState(false);
   const fixCosts = useFixCostsStore((state) => state.fixCosts);
+  const editFixedItem = useFixCostsStore((state) => state.editFixItem);
   const sumFixedCosts = useFixCostsStore((state) => state.sum());
 
   const [newFixCostTextInputIsVisible, setNewFixCostTextInputIsVisible] = useState(false);
@@ -206,24 +203,42 @@ const FixCostsCard = () => {
       }}
     >
       <IconButton
-        icon={() => <MaterialIcons name="edit" size={24} color={theme.colors.textColor} />}
-        iconColor={theme.colors.secondary}
-        size={20}
-        onPress={() => console.log("Pressed")}
+        icon={() => (
+          <MaterialIcons
+            name={!editFixCosts ? "edit" : "check"}
+            size={24}
+            color={theme.colors.textColor}
+          />
+        )}
+        size={30}
+        onPress={() => setEditFixCosts(!editFixCosts)}
         style={{
           position: "absolute",
           top: 0,
           right: 0,
           backgroundColor: theme.colors.secondary,
+          zIndex: 100,
         }}
       />
-      <Card.Title titleStyle={{ color: theme.colors.primary }} title="Fix Kosten" />
+      <Card.Title
+        titleStyle={{ color: theme.colors.primary }}
+        style={{ marginBottom: 10 }}
+        title="Fix Kosten"
+      />
       <Card.Content>
-        {fixCosts?.map((obj, index) => (
-          <View key={index} style={{ marginTop: 15 }}>
-            <CostItem name={obj?.name} value={obj?.cost} />
-          </View>
-        ))}
+        {fixCosts?.map((obj, index) =>
+          !editFixCosts ? (
+            <CostItem key={index} name={obj?.name} value={obj?.cost} />
+          ) : (
+            <CostItemTextInput
+              key={index}
+              index={index}
+              name={obj?.name}
+              value={obj?.cost}
+              editFixedItem={editFixedItem}
+            />
+          )
+        )}
         {newFixCostTextInputIsVisible && (
           <NewCostInputs
             costEntryName={fixCostEntryName}

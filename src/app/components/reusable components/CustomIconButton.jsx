@@ -13,13 +13,7 @@ const CustomIconButton = ({ icon, onPress }) => {
         borderRadius: 50,
       }}
     >
-      <IconButton
-        icon={icon}
-        iconColor={theme.colors.textColor}
-        size={35}
-        onPress={onPress}
-        style={{}}
-      />
+      <IconButton icon={icon} iconColor={theme.colors.textColor} size={35} onPress={onPress} />
     </View>
   );
 };
