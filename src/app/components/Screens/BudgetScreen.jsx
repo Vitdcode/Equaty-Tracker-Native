@@ -36,7 +36,6 @@ const BudgetScreen = () => {
           gap: 5,
         }}
       >
-        {/* income */}
         <Text variant="titleMedium" style={{ color: "white", fontWeight: "bold", marginTop: 25 }}>
           Verdienst
         </Text>
@@ -62,14 +61,14 @@ const BudgetScreen = () => {
       )}
 
       <KeyboardAwareScrollView
-        style={{ width: "100%" }}
+        style={{ width: "100%", marginTop: 30 }}
         contentContainerStyle={{
           paddingBottom: 50,
         }}
+        fadingEdgeLength={30}
       >
         <View
           style={{
-            marginTop: 90,
             position: "relative",
             width: "85%",
             gap: 20,

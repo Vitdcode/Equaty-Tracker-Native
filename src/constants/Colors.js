@@ -101,7 +101,7 @@ const Colors = {
       level2: "rgb(30, 43, 41)",
       level3: "rgb(32, 49, 46)",
       level4: "rgb(32, 51, 48)",
-      level5: "rgb(33, 55, 51)",
+      level5: "rgb(50, 70, 66)",
     },
     surfaceDisabled: "rgba(224, 227, 225, 0.12)",
     onSurfaceDisabled: "rgba(224, 227, 225, 0.38)",
