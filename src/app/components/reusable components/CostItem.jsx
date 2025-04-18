@@ -36,7 +36,7 @@ export const CostItemTextInput = ({ index, name, value, editFixedItem }) => {
       />
       <TextInput
         mode="outlined"
-        label="Value"
+        label="Betrag"
         value={costInput}
         onChangeText={(val) => handleInputChange("cost", val)}
         style={{ width: "40%" }}

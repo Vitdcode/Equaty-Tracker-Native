@@ -60,6 +60,11 @@ export const useSubsStore = create((set, get) => ({
       subs: [...state.subs, { name: name, cost: value }],
     })),
 
+  editSub: (index, field, value) =>
+    set((state) => ({
+      subs: state.subs.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    })),
+
   sum: () => {
     const { subs } = get();
     let total = 0;

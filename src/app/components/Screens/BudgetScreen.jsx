@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Card, Divider, IconButton, Text, TextInput, useTheme } from "react-native-paper";
+import { Button, Card, Divider, IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { useFixCostsStore, useMoneyStore, useSubsStore } from "../../zustand/store";
 import CostItem, { CostItemTextInput } from "../reusable components/CostItem";
 import CustomIconButton from "../reusable components/CustomIconButton";
@@ -94,6 +94,8 @@ const SubsCard = () => {
   const [subCostEntryName, setSubCostEntryName] = useState("");
   const [subCostEntrySum, setSubCostEntrySum] = useState("");
   const { setNewSub } = useSubsStore();
+  const editSubs = useSubsStore((state) => state.editSub);
+  const [subsIsEditMode, setSubsIsEditMode] = useState(false);
 
   const handleSubmitNewSub = () => {
     if (newSubCostTextInputIsVisible) {
@@ -120,12 +122,45 @@ const SubsCard = () => {
   };
 
   return (
-    <Card>
-      <Card.Title title="Abos" titleStyle={{ color: theme.colors.primary }} />
-      <Card.Content style={{ gap: 10 }}>
-        {subs.map((subObj, index) => (
-          <CostItem key={index} name={subObj.name} value={subObj.cost} />
-        ))}
+    <Card style={{ padding: 5, position: "relative", marginBottom: 20 }}>
+      <IconButton
+        icon={() => (
+          <MaterialIcons
+            name={!subsIsEditMode ? "edit" : "check"}
+            size={24}
+            color={theme.colors.gray}
+          />
+        )}
+        size={30}
+        onPress={() => setSubsIsEditMode(!subsIsEditMode)}
+        style={{
+          position: "absolute",
+          top: -5,
+          right: 0,
+          /*        backgroundColor: theme.colors.secondary, */
+          zIndex: 100,
+        }}
+      />
+
+      <Card.Title
+        title="Abos"
+        titleStyle={{ color: theme.colors.primary }}
+        style={{ marginBottom: 10 }}
+      />
+      <Card.Content>
+        {subs.map((obj, index) =>
+          !subsIsEditMode ? (
+            <CostItem key={index} name={obj?.name} value={obj?.cost} />
+          ) : (
+            <CostItemTextInput
+              key={index}
+              index={index}
+              name={obj?.name}
+              value={obj?.cost}
+              editFixedItem={editSubs}
+            />
+          )
+        )}
         {newSubCostTextInputIsVisible && (
           <NewCostInputs
             costEntryName={subCostEntryName}
@@ -214,9 +249,8 @@ const FixCostsCard = () => {
         onPress={() => setEditFixCosts(!editFixCosts)}
         style={{
           position: "absolute",
-          top: 0,
+          top: -5,
           right: 0,
-          backgroundColor: theme.colors.secondary,
           zIndex: 100,
         }}
       />
@@ -274,7 +308,8 @@ const FixCostsCard = () => {
 const MoneyLeftCard = ({ income }) => {
   const theme = useTheme();
   const sumFixedCosts = useFixCostsStore((state) => state.sum());
-  const sum = income - parseFloat(sumFixedCosts);
+  const sumSubsCost = useSubsStore((state) => state.sum());
+  const sum = income - parseFloat(sumFixedCosts) - parseFloat(sumSubsCost);
   return (
     <Card>
       <Card.Title titleStyle={{ color: theme.colors.primary }} title="Geld übrig nach Ausgaben" />
