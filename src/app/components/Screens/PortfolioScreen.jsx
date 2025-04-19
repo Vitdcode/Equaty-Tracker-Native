@@ -3,7 +3,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Card, Text, useTheme } from "react-native-paper";
-import useCounterStore, { useTextStore } from "../../zustand/store";
+import useCounterStore, { useAssetsStore, useTextStore } from "../../zustand/store";
 import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 import { useState } from "react";
 import AssetDataItem from "../reusable components/AssetDataItem";
@@ -13,6 +13,16 @@ function PortfolioScreen() {
   const theme = useTheme();
   const [selectedYear, setSelectedYear] = useState("2025");
   const years = ["2023", "2024", "2025"];
+
+  /*   const assets = useAssetsStore((state) => state.assets);
+  const stockData = useAssetsStore((state) => state.stockData); */
+  const assets = useAssetsStore((state) => state.allAssets);
+
+  /*   assets.map((asset) => {
+  Object.keys(asset).forEach((key) => {
+
+  }) 
+  }); */
 
   return (
     <View
@@ -76,26 +86,69 @@ function PortfolioScreen() {
         fadingEdgeLength={30}
       >
         <View style={{ marginTop: 60, width: "90%", marginHorizontal: "auto", gap: 50 }}>
-          <Card>
-            <Card.Title title="29.07.2024" titleStyle={{ color: theme.colors.primary }} />
-            <Card.Content>
-              <AssetData />
-              <TotalAssets />
-            </Card.Content>
-          </Card>
-
-          <Card>
-            <Card.Title title="29.07.2024" titleStyle={{ color: theme.colors.primary }} />
-            <Card.Content>
-              <AssetData />
-              <TotalAssets />
-            </Card.Content>
-          </Card>
+          {assets.map(
+            (assetsData) =>
+              assetsData[0].date.includes(selectedYear) && (
+                <Card>
+                  <Card.Title
+                    title={assetsData[0].date}
+                    titleStyle={{ color: theme.colors.primary }}
+                  />
+                  <Card.Content>
+                    <AssetData assetsData={assetsData} />
+                    <TotalAssets />
+                  </Card.Content>
+                </Card>
+              )
+          )}
         </View>
       </ScrollView>
     </View>
   );
 }
+
+const AssetData = ({ assetsData }) => {
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    screenContainer: {
+      padding: 10,
+      gap: 10,
+      backgroundColor: theme.colors.elevation.level5,
+      borderRadius: 10,
+      marginBottom: 20,
+    },
+  });
+
+  return (
+    <>
+      <View style={styles.screenContainer}>
+        <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+          Allgemeines Vermögen
+        </Text>
+        {assetsData.map(
+          (asset) =>
+            asset.name === "General Assets" &&
+            Object.entries(asset.data).map(([key, value]) => (
+              <AssetDataItem key={key} label={key} value={value} />
+            ))
+        )}
+      </View>
+      <View style={styles.screenContainer}>
+        <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+          Aktien Daten
+        </Text>
+        {assetsData.map(
+          (asset) =>
+            asset.name === "Stock Data" &&
+            Object.entries(asset.data).map(([key, value]) => (
+              <AssetDataItem key={key} label={key} value={value} />
+            ))
+        )}
+      </View>
+    </>
+  );
+};
 
 const TotalAssets = () => {
   const theme = useTheme();
@@ -116,42 +169,6 @@ const TotalAssets = () => {
         37.432
       </Text>
     </View>
-  );
-};
-
-const AssetData = () => {
-  const theme = useTheme();
-
-  const styles = StyleSheet.create({
-    screenContainer: {
-      padding: 10,
-      gap: 10,
-      backgroundColor: theme.colors.elevation.level5,
-      borderRadius: 10,
-      marginBottom: 20,
-    },
-  });
-
-  return (
-    <>
-      <View style={styles.screenContainer}>
-        <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-          Allgemeines Vermögen
-        </Text>
-        <AssetDataItem label="Investiert" value="25.000€" />
-        <AssetDataItem label="Cash Trade Republic" value="4000€" />
-        <AssetDataItem label="C24 Tagesgeld" value="1714€" />
-        <AssetDataItem label="Cash" value="3000€" />
-      </View>
-      <View style={styles.screenContainer}>
-        <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-          Aktien Daten
-        </Text>
-        <AssetDataItem label="S&P 500" value="570.30€" />
-        <AssetDataItem label="Bitcoin" value="98.148€" />
-        <AssetDataItem label="XRP" value="2.87€" />
-      </View>
-    </>
   );
 };
 

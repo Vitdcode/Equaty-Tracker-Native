@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import metricDate from "../js-functions/date-metric-format";
 
 const useCounterStore = create((set) => ({
   count: 0,
@@ -22,6 +23,13 @@ export const useFixCostsStore = create((set, get) => ({
   fixCosts: [
     { name: "Miete", cost: "675.05" },
     { name: "Strom", cost: "50.00" },
+    { name: "KFZ Versicherung", cost: "47.51" },
+    { name: "Hausrat", cost: "12.78" },
+    { name: "Haftpflicht", cost: "2.83" },
+    { name: "Tanken", cost: "40.00" },
+    { name: "Friseur", cost: "21.00" },
+    { name: "Einkaufen", cost: "351.00" },
+    { name: "Investment", cost: "800.00" },
   ],
 
   setNewFixCost: (name, value) =>
@@ -78,6 +86,105 @@ export const useSubsStore = create((set, get) => ({
 
     return total;
   },
+}));
+
+export const useAssetsStore = create((set, get) => ({
+  /*   assets: [
+    {
+      date: "29.07.2024",
+      investiert: 17089,
+      "Cash Trade Republic": 4000,
+      "C24 Tagesgeld": 1714,
+      Cash: 3000,
+    },
+    {
+      date: "29.07.2024",
+      investiert: 17089,
+      "Cash Trade Republic": 4000,
+      "C24 Tagesgeld": 1714,
+      Cash: 3000,
+    },
+  ],
+
+  stockData: [
+    {
+      date: "29.07.2024",
+      "S&P 500": 531.18,
+    },
+    {
+      date: "29.07.2024",
+      "S&P 500": 531.18,
+    },
+  ], */
+
+  allAssets: [
+    [
+      {
+        name: "General Assets",
+        date: "29.07.2024",
+        data: {
+          Investiert: 17089,
+          "Cash Trade Republic": 4000,
+          "C24 Tagesgeld": 1714,
+          Cash: 3000,
+        },
+      },
+      {
+        name: "Stock Data",
+        data: {
+          "S&P 500": 531.18,
+        },
+      },
+    ],
+    [
+      {
+        name: "General Assets",
+        date: "30.07.2025",
+        data: {
+          Investiert: 17189,
+          "Cash Trade Republic": 4000,
+          "C24 Tagesgeld": 1714,
+          Cash: 3000,
+        },
+      },
+      {
+        name: "Stock Data",
+        data: {
+          "S&P 500": 531.18,
+        },
+      },
+    ],
+  ],
+
+  setNewAsset: (investValue, tradeRepCash, c24Cash, cash, sp500) =>
+    set((state) => ({
+      assets: [
+        ...state.assets,
+        [
+          {
+            name: "General Assets",
+            date: metricDate(),
+            data: {
+              Investiert: investValue,
+              "Cash Trade Republic": tradeRepCash,
+              "C24 Tagesgeld": c24Cash,
+              Cash: cash,
+            },
+          },
+          {
+            name: "Stock Data",
+            data: {
+              "S&P 500": sp500,
+            },
+          },
+        ],
+      ],
+    })),
+
+  editAsset: (index, field, value) =>
+    set((state) => ({
+      assets: state.assets.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    })),
 }));
 
 export default useCounterStore;

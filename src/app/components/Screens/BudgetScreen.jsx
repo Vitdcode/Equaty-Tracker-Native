@@ -61,9 +61,10 @@ const BudgetScreen = () => {
       )}
 
       <KeyboardAwareScrollView
-        style={{ width: "100%", marginTop: 30 }}
+        style={{ width: "100%", marginTop: 40 }}
         contentContainerStyle={{
           paddingBottom: 50,
+          paddingTop: 20,
         }}
         fadingEdgeLength={30}
       >
@@ -311,7 +312,10 @@ const MoneyLeftCard = ({ income }) => {
   const sum = income - parseFloat(sumFixedCosts) - parseFloat(sumSubsCost);
   return (
     <Card>
-      <Card.Title titleStyle={{ color: theme.colors.primary }} title="Geld übrig nach Ausgaben" />
+      <Card.Title
+        titleStyle={{ color: theme.colors.primary, fontWeight: "700" }}
+        title="Geld übrig nach Ausgaben"
+      />
       <Card.Content>
         <View
           style={{
@@ -329,7 +333,6 @@ const MoneyLeftCard = ({ income }) => {
             icon={() => <FontAwesome6 name="money-check-dollar" size={24} color="white" />}
             iconColor={theme.colors.secondary}
             size={20}
-            onPress={() => console.log("Pressed")}
             style={{
               backgroundColor: theme.colors.secondary,
               borderRadius: 7,
@@ -341,8 +344,49 @@ const MoneyLeftCard = ({ income }) => {
             style={{ color: theme.colors.primary, fontWeight: "bold" }}
           >{`${sum.toFixed(2)} €`}</Text>
         </View>
+        <SumAllCosts />
       </Card.Content>
     </Card>
+  );
+};
+
+const SumAllCosts = () => {
+  const theme = useTheme();
+  const sumFixedCosts = useFixCostsStore((state) => state.sum());
+  const sumSubsCost = useSubsStore((state) => state.sum());
+  const sum = parseFloat(sumFixedCosts) + parseFloat(sumSubsCost);
+  return (
+    <View style={{ marginTop: 20 }}>
+      <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+        Summe aller Kosten
+      </Text>
+      <View
+        style={{
+          marginTop: 20,
+          gap: 10,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: theme.colors.elevation.level3,
+          borderRadius: 10,
+          padding: 8,
+        }}
+      >
+        <IconButton
+          icon={() => <FontAwesome6 name="money-check-dollar" size={24} color="white" />}
+          iconColor={theme.colors.secondary}
+          size={20}
+          style={{
+            backgroundColor: theme.colors.secondary,
+            borderRadius: 7,
+          }}
+        />
+
+        <Text variant="titleLarge" style={{ color: theme.colors.red, fontWeight: "bold" }}>
+          {sum.toFixed(2)} €
+        </Text>
+      </View>
+    </View>
   );
 };
 

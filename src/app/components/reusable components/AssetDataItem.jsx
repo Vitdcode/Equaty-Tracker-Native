@@ -5,7 +5,7 @@ const AssetDataItem = ({ label, value }) => {
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
       <Text variant="titleMedium">{label}</Text>
-      <Text variant="titleMedium">{value}</Text>
+      <Text variant="titleMedium">{`${value}€`}</Text>
     </View>
   );
 };
