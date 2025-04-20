@@ -93,6 +93,9 @@ export const useAssetsStore = create((set, get) => ({
   setPortfolioCardIsEdit: () =>
     set((state) => ({ portfolioCardIsEdit: !state.portfolioCardIsEdit })),
 
+  portFolioCardId: null,
+  setPortfolioCardId: (id) => set((state) => ({ portFolioCardId: id })),
+
   allAssets: [
     {
       id: Crypto.randomUUID(),

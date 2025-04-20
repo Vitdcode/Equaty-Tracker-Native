@@ -14,13 +14,8 @@ function PortfolioScreen() {
   const newPortfolioCardIsEdit = useAssetsStore((state) => state.newPortfolioCardIsEdit);
   const setNewPortfolioCardIsEdit = useAssetsStore((state) => state.setNewPortfolioCardIsEdit);
 
-  const portfolioCardIsEdit = useAssetsStore((state) => state.portfolioCardIsEdit);
-  const setPortfolioCardIsEdit = useAssetsStore((state) => state.setPortfolioCardIsEdit);
-
   const assets = useAssetsStore((state) => state.allAssets);
   const setNewAssetsData = useAssetsStore((state) => state.setNewAsset);
-
-  /*   const setSearchId = useAssetsStore((state) => state.setSearchId); */
 
   const handleSetNewAssetsCard = () => {
     setNewPortfolioCardIsEdit();

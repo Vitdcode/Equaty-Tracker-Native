@@ -8,8 +8,11 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
   const [valueState, setValueState] = useState(value);
   const assets = useAssetsStore((state) => state.allAssets);
   const editNewAssets = useAssetsStore((state) => state.editNewAssets);
+  const portfolioCardIsEdit = useAssetsStore((state) => state.portfolioCardIsEdit);
+  const portFolioCardId = useAssetsStore((state) => state.portFolioCardId);
 
   const addNewCardBoolean = newPortfolioCardIsEdit && assets[assets.length - 1].id === id;
+  const editCardBoolean = portfolioCardIsEdit && portFolioCardId === id;
 
   const handleInputChange = (val) => {
     setValueState(val);
@@ -25,7 +28,7 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
         alignItems: "center",
       }}
     >
-      {addNewCardBoolean ? (
+      {addNewCardBoolean || editCardBoolean ? (
         <>
           <Text variant="titleMedium">{label}</Text>
           <TextInput
