@@ -24,6 +24,12 @@ function PortfolioScreen() {
     }
   };
 
+  const portfolioSum = () => {
+    return Object.values(assets[assets.length - 1]["generalAssets"]).reduce((acc, value) => {
+      return (acc += parseFloat(value));
+    }, 0);
+  };
+
   return (
     <View
       style={{
@@ -48,7 +54,7 @@ function PortfolioScreen() {
       >
         <Text style={{ color: "white", fontWeight: "bold", marginTop: 58 }}>Portfolio</Text>
         <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
-          25.000€
+          {Number(portfolioSum()).toLocaleString("de-DE")}€
         </Text>
       </LinearGradient>
       <View
@@ -186,7 +192,7 @@ const TotalAssets = ({ assetData }) => {
         Gesamt
       </Text>
       <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
-        {`${sum}€`}
+        {Number(sum).toLocaleString("de-DE")}€
       </Text>
     </View>
   );

@@ -116,31 +116,33 @@ export const useAssetsStore = create((set, get) => ({
     {
       id: Crypto.randomUUID(),
       name: "General Assets",
-      date: "30.07.2025",
+      date: "29.10.2024",
       generalAssets: {
-        Investiert: 17189,
-        "Cash Trade Republic": 4000,
-        "C24 Tagesgeld": 1714,
+        Investiert: 22909.85,
+        "Cash Trade Republic": 4861.33,
+        "C24 Tagesgeld": 2003.62,
         Cash: 3000,
       },
 
       stockData: {
-        "S&P 500": 531.18,
+        "S&P 500": 570.3,
       },
     },
 
     {
       id: Crypto.randomUUID(),
       name: "General Assets",
-      date: "30.07.2025",
+      date: "01.02.2025",
       generalAssets: {
-        Investiert: 25000.89,
-        "Cash Trade Republic": 4000,
-        "C24 Tagesgeld": 1714,
+        Investiert: 29276,
+        "Cash Trade Republic": 3994,
+        "C24 Tagesgeld": 1132,
         Cash: 3000,
       },
       stockData: {
         "S&P 500": 531.18,
+        Bitcon: 98148,
+        XRP: 2.87,
       },
     },
   ],

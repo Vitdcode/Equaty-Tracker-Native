@@ -41,7 +41,7 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
       ) : (
         <>
           <Text variant="titleMedium">{label}</Text>
-          <Text variant="titleMedium">{`${value}€`}</Text>
+          <Text variant="titleMedium">{Number(value).toLocaleString("de-DE")}€</Text>
         </>
       )}
     </View>
