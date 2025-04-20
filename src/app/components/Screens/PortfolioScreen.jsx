@@ -1,28 +1,33 @@
 import { Picker } from "@react-native-picker/picker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ScrollView, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Card, Text, useTheme } from "react-native-paper";
-import useCounterStore, { useAssetsStore, useTextStore } from "../../zustand/store";
-import CustomIconBtnWithText from "../reusable components/CustomIconBtnWithText";
 import { useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Card, IconButton, Text, useTheme } from "react-native-paper";
+import { useAssetsStore } from "../../zustand/store";
 import AssetDataItem from "../reusable components/AssetDataItem";
+import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithState";
 
 function PortfolioScreen() {
-  const { text, setText } = useTextStore();
   const theme = useTheme();
   const [selectedYear, setSelectedYear] = useState("2025");
   const years = ["2023", "2024", "2025"];
+  const newPortfolioCardIsEdit = useAssetsStore((state) => state.newPortfolioCardIsEdit);
+  const setNewPortfolioCardIsEdit = useAssetsStore((state) => state.setNewPortfolioCardIsEdit);
 
-  /*   const assets = useAssetsStore((state) => state.assets);
-  const stockData = useAssetsStore((state) => state.stockData); */
+  const portfolioCardIsEdit = useAssetsStore((state) => state.portfolioCardIsEdit);
+  const setPortfolioCardIsEdit = useAssetsStore((state) => state.setPortfolioCardIsEdit);
+
   const assets = useAssetsStore((state) => state.allAssets);
+  const setNewAssetsData = useAssetsStore((state) => state.setNewAsset);
 
-  /*   assets.map((asset) => {
-  Object.keys(asset).forEach((key) => {
+  /*   const setSearchId = useAssetsStore((state) => state.setSearchId); */
 
-  }) 
-  }); */
+  const handleSetNewAssetsCard = () => {
+    setNewPortfolioCardIsEdit();
+    if (!newPortfolioCardIsEdit) {
+      setNewAssetsData();
+    }
+  };
 
   return (
     <View
@@ -41,12 +46,12 @@ function PortfolioScreen() {
           height: "25%",
           width: "100%",
           position: "relative",
-          justifyContent: "center",
+          /*         justifyContent: "center", */
           alignItems: "center",
           gap: 5,
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold", marginTop: 10 }}>Portfolio</Text>
+        <Text style={{ color: "white", fontWeight: "bold", marginTop: 58 }}>Portfolio</Text>
         <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
           25.000€
         </Text>
@@ -55,7 +60,7 @@ function PortfolioScreen() {
         style={{
           position: "absolute",
           width: "70%",
-          top: 190,
+          top: 130,
           backgroundColor: theme.colors.elevation.level1,
           elevation: 5,
           flexDirection: "row",
@@ -79,6 +84,18 @@ function PortfolioScreen() {
           ))}
         </Picker>
       </View>
+      <IconButton
+        icon={!newPortfolioCardIsEdit ? "plus" : "check"}
+        iconColor={theme.colors.textColor}
+        size={40}
+        onPress={handleSetNewAssetsCard}
+        style={{
+          backgroundColor: theme.colors.secondary,
+          borderRadius: 50,
+          position: "absolute",
+          top: 190,
+        }}
+      />
 
       <ScrollView
         style={{ width: "100%", marginTop: 30 }}
@@ -87,16 +104,24 @@ function PortfolioScreen() {
       >
         <View style={{ marginTop: 60, width: "90%", marginHorizontal: "auto", gap: 50 }}>
           {assets.map(
-            (assetsData) =>
-              assetsData[0].date.includes(selectedYear) && (
-                <Card>
-                  <Card.Title
-                    title={assetsData[0].date}
-                    titleStyle={{ color: theme.colors.primary }}
-                  />
+            (assetData, index) =>
+              assetData.date.includes(selectedYear) && (
+                <Card key={index}>
+                  <View>
+                    <Card.Title
+                      title={assetData.date}
+                      titleStyle={{ color: theme.colors.primary }}
+                    />
+                    <CustomIconButtonWithState id={assetData.id} />
+                  </View>
+
                   <Card.Content>
-                    <AssetData assetsData={assetsData} />
-                    <TotalAssets />
+                    {assetData.date.includes(selectedYear) && (
+                      <View key={assetData.id} style={{ gap: 10 }}>
+                        <AssetData assetData={assetData} id={assetData.id} />
+                        <TotalAssets />
+                      </View>
+                    )}
                   </Card.Content>
                 </Card>
               )
@@ -107,7 +132,7 @@ function PortfolioScreen() {
   );
 }
 
-const AssetData = ({ assetsData }) => {
+const AssetData = ({ assetData, id }) => {
   const theme = useTheme();
 
   const styles = StyleSheet.create({
@@ -126,25 +151,17 @@ const AssetData = ({ assetsData }) => {
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Allgemeines Vermögen
         </Text>
-        {assetsData.map(
-          (asset) =>
-            asset.name === "General Assets" &&
-            Object.entries(asset.data).map(([key, value]) => (
-              <AssetDataItem key={key} label={key} value={value} />
-            ))
-        )}
+        {Object.entries(assetData["generalAssets"]).map(([label, value]) => (
+          <AssetDataItem key={label} label={label} value={value} id={id} />
+        ))}
       </View>
       <View style={styles.screenContainer}>
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Aktien Daten
         </Text>
-        {assetsData.map(
-          (asset) =>
-            asset.name === "Stock Data" &&
-            Object.entries(asset.data).map(([key, value]) => (
-              <AssetDataItem key={key} label={key} value={value} />
-            ))
-        )}
+        {Object.entries(assetData["stockData"]).map(([label, value]) => (
+          <AssetDataItem key={label} label={label} value={value} id={id} objName="stockData" />
+        ))}
       </View>
     </>
   );

@@ -71,7 +71,7 @@ const BudgetScreen = () => {
         <View
           style={{
             position: "relative",
-            width: "85%",
+            width: "90%",
             gap: 20,
             marginHorizontal: "auto",
           }}
@@ -137,7 +137,6 @@ const SubsCard = () => {
           position: "absolute",
           top: -5,
           right: 0,
-          /*        backgroundColor: theme.colors.secondary, */
           zIndex: 100,
         }}
       />
@@ -185,7 +184,7 @@ const SubsCard = () => {
             borderRadius: 50,
             position: "absolute",
             bottom: -40,
-            right: 155,
+            right: 165,
           }}
         />
       </Card.Content>
@@ -297,7 +296,7 @@ const FixCostsCard = () => {
             borderRadius: 50,
             position: "absolute",
             bottom: -40,
-            right: 155,
+            right: 165,
           }}
         />
       </Card.Content>

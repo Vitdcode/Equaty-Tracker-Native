@@ -1,15 +1,11 @@
 import { create } from "zustand";
 import metricDate from "../js-functions/date-metric-format";
+import * as Crypto from "expo-crypto";
 
 const useCounterStore = create((set) => ({
   count: 0,
   increment: () => set((state) => ({ count: state.count + 1 })),
   decrement: () => set((state) => ({ count: state.count - 1 })),
-}));
-
-export const useTextStore = create((set) => ({
-  text: "",
-  setText: (newText) => set({ text: newText }),
 }));
 
 export const useMoneyStore = create((set) => ({
@@ -89,101 +85,96 @@ export const useSubsStore = create((set, get) => ({
 }));
 
 export const useAssetsStore = create((set, get) => ({
-  /*   assets: [
-    {
-      date: "29.07.2024",
-      investiert: 17089,
-      "Cash Trade Republic": 4000,
-      "C24 Tagesgeld": 1714,
-      Cash: 3000,
-    },
-    {
-      date: "29.07.2024",
-      investiert: 17089,
-      "Cash Trade Republic": 4000,
-      "C24 Tagesgeld": 1714,
-      Cash: 3000,
-    },
-  ],
+  newPortfolioCardIsEdit: false,
+  setNewPortfolioCardIsEdit: () =>
+    set((state) => ({ newPortfolioCardIsEdit: !state.newPortfolioCardIsEdit })),
 
-  stockData: [
-    {
-      date: "29.07.2024",
-      "S&P 500": 531.18,
-    },
-    {
-      date: "29.07.2024",
-      "S&P 500": 531.18,
-    },
-  ], */
+  portfolioCardIsEdit: false,
+  setPortfolioCardIsEdit: () =>
+    set((state) => ({ portfolioCardIsEdit: !state.portfolioCardIsEdit })),
 
   allAssets: [
-    [
-      {
-        name: "General Assets",
-        date: "29.07.2024",
-        data: {
-          Investiert: 17089,
-          "Cash Trade Republic": 4000,
-          "C24 Tagesgeld": 1714,
-          Cash: 3000,
-        },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "29.07.2024",
+      generalAssets: {
+        Investiert: 17089,
+        "Cash Trade Republic": 4000,
+        "C24 Tagesgeld": 1714,
+        Cash: 3000,
       },
-      {
-        name: "Stock Data",
-        data: {
-          "S&P 500": 531.18,
-        },
+
+      stockData: {
+        "S&P 500": 531.18,
       },
-    ],
-    [
-      {
-        name: "General Assets",
-        date: "30.07.2025",
-        data: {
-          Investiert: 17189,
-          "Cash Trade Republic": 4000,
-          "C24 Tagesgeld": 1714,
-          Cash: 3000,
-        },
+    },
+
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "30.07.2025",
+      generalAssets: {
+        Investiert: 17189,
+        "Cash Trade Republic": 4000,
+        "C24 Tagesgeld": 1714,
+        Cash: 3000,
       },
-      {
-        name: "Stock Data",
-        data: {
-          "S&P 500": 531.18,
-        },
+
+      stockData: {
+        "S&P 500": 531.18,
       },
-    ],
+    },
+
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "30.07.2025",
+      generalAssets: {
+        Investiert: 25000,
+        "Cash Trade Republic": 4000,
+        "C24 Tagesgeld": 1714,
+        Cash: 3000,
+      },
+      stockData: {
+        "S&P 500": 531.18,
+      },
+    },
   ],
 
-  setNewAsset: (investValue, tradeRepCash, c24Cash, cash, sp500) =>
+  setNewAsset: () =>
     set((state) => ({
-      assets: [
-        ...state.assets,
-        [
-          {
-            name: "General Assets",
-            date: metricDate(),
-            data: {
-              Investiert: investValue,
-              "Cash Trade Republic": tradeRepCash,
-              "C24 Tagesgeld": c24Cash,
-              Cash: cash,
-            },
+      allAssets: [
+        ...state.allAssets,
+        {
+          id: Crypto.randomUUID(), // Add a unique ID for easier manipulation
+          date: metricDate(),
+          generalAssets: {
+            Investiert: 0,
+            "Cash Trade Republic": 0,
+            "C24 Tagesgeld": 0,
+            Cash: 0,
           },
-          {
-            name: "Stock Data",
-            data: {
-              "S&P 500": sp500,
-            },
+          stockData: {
+            "S&P 500": 0,
           },
-        ],
+        },
       ],
     })),
 
-  editAsset: (index, field, value) =>
+  editNewAssets: (field, value, id, objName) =>
     set((state) => ({
-      assets: state.assets.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+      allAssets: state.allAssets.map((assetData) =>
+        assetData.id === id
+          ? {
+              ...assetData,
+              [objName]: {
+                ...assetData[objName],
+                [field]: value,
+              },
+            }
+          : assetData
+      ),
     })),
 }));
 
