@@ -134,7 +134,7 @@ export const useAssetsStore = create((set, get) => ({
       name: "General Assets",
       date: "30.07.2025",
       generalAssets: {
-        Investiert: 25000,
+        Investiert: 25000.89,
         "Cash Trade Republic": 4000,
         "C24 Tagesgeld": 1714,
         Cash: 3000,

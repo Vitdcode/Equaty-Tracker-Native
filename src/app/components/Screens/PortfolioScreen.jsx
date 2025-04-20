@@ -98,29 +98,32 @@ function PortfolioScreen() {
         fadingEdgeLength={30}
       >
         <View style={{ marginTop: 60, width: "90%", marginHorizontal: "auto", gap: 50 }}>
-          {assets.map(
-            (assetData, index) =>
-              assetData.date.includes(selectedYear) && (
-                <Card key={index}>
-                  <View>
-                    <Card.Title
-                      title={assetData.date}
-                      titleStyle={{ color: theme.colors.primary }}
-                    />
-                    <CustomIconButtonWithState id={assetData.id} />
-                  </View>
+          {assets
+            .slice()
+            .reverse()
+            .map(
+              (assetData, index) =>
+                assetData.date.includes(selectedYear) && (
+                  <Card key={index}>
+                    <View>
+                      <Card.Title
+                        title={assetData.date}
+                        titleStyle={{ color: theme.colors.primary }}
+                      />
+                      <CustomIconButtonWithState id={assetData.id} />
+                    </View>
 
-                  <Card.Content>
-                    {assetData.date.includes(selectedYear) && (
-                      <View key={assetData.id} style={{ gap: 10 }}>
-                        <AssetData assetData={assetData} id={assetData.id} />
-                        <TotalAssets />
-                      </View>
-                    )}
-                  </Card.Content>
-                </Card>
-              )
-          )}
+                    <Card.Content>
+                      {assetData.date.includes(selectedYear) && (
+                        <View key={assetData.id} style={{ gap: 10 }}>
+                          <AssetData assetData={assetData} id={assetData.id} />
+                          <TotalAssets assetData={assetData} />
+                        </View>
+                      )}
+                    </Card.Content>
+                  </Card>
+                )
+            )}
         </View>
       </ScrollView>
     </View>
@@ -162,8 +165,13 @@ const AssetData = ({ assetData, id }) => {
   );
 };
 
-const TotalAssets = () => {
+const TotalAssets = ({ assetData }) => {
   const theme = useTheme();
+
+  const sum = Object.values(assetData["generalAssets"]).reduce((acc, num) => {
+    return (acc += parseFloat(num));
+  }, 0);
+
   return (
     <View
       style={{
@@ -178,7 +186,7 @@ const TotalAssets = () => {
         Gesamt
       </Text>
       <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
-        37.432
+        {`${sum}€`}
       </Text>
     </View>
   );
