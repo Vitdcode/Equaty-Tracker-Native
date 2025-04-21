@@ -6,11 +6,13 @@ import { Card, IconButton, Text, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 import AssetDataItem from "../reusable components/AssetDataItem";
 import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithState";
+import DifferencePercentage from "../reusable components/DifferencePercentage";
 
 function PortfolioScreen() {
   const theme = useTheme();
-  const [selectedYear, setSelectedYear] = useState("2025");
-  const years = ["2023", "2024", "2025"];
+  const selectedYear = useAssetsStore((state) => state.selectedYear);
+  const setSelectedYear = useAssetsStore((state) => state.setSelectedYear);
+
   const newPortfolioCardIsEdit = useAssetsStore((state) => state.newPortfolioCardIsEdit);
   const setNewPortfolioCardIsEdit = useAssetsStore((state) => state.setNewPortfolioCardIsEdit);
 
@@ -30,6 +32,15 @@ function PortfolioScreen() {
     }, 0);
   };
 
+  const getYears = () => {
+    let years = new Set();
+    assets.map((asset) => {
+      years.add(asset.date.split(".")[2]);
+    });
+    return Array.from(years);
+  };
+  const years = getYears();
+
   return (
     <View
       style={{
@@ -40,14 +51,13 @@ function PortfolioScreen() {
       }}
     >
       <LinearGradient
-        colors={["rgba(79, 196, 141, 0.58)", "rgba(49, 185, 155, 0.6)"]}
+        colors={[theme.colors.secondary, theme.colors.secondary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
           height: "25%",
           width: "100%",
           position: "relative",
-          /*         justifyContent: "center", */
           alignItems: "center",
           gap: 5,
         }}
@@ -71,7 +81,7 @@ function PortfolioScreen() {
         }}
       >
         <Picker
-          selectedValue={selectedYear}
+          selectedValue={selectedYear.toString()}
           onValueChange={(itemValue) => setSelectedYear(itemValue)} // Simplified, itemIndex not needed
           mode="dropdown"
           style={{
@@ -85,21 +95,25 @@ function PortfolioScreen() {
           ))}
         </Picker>
       </View>
-      <IconButton
-        icon={!newPortfolioCardIsEdit ? "plus" : "check"}
-        iconColor={theme.colors.textColor}
-        size={40}
-        onPress={handleSetNewAssetsCard}
+      <View
         style={{
+          elevation: 5,
           backgroundColor: theme.colors.secondary,
           borderRadius: 50,
           position: "absolute",
-          top: 190,
+          top: 195,
         }}
-      />
+      >
+        <IconButton
+          icon={!newPortfolioCardIsEdit ? "plus" : "check"}
+          iconColor={theme.colors.textColor}
+          size={30}
+          onPress={handleSetNewAssetsCard}
+        />
+      </View>
 
       <ScrollView
-        style={{ width: "100%", marginTop: 30 }}
+        style={{ width: "100%", marginTop: 35 }}
         contentContainerStyle={{ paddingBottom: 60 }}
         fadingEdgeLength={30}
       >
@@ -111,18 +125,28 @@ function PortfolioScreen() {
               (assetData, index) =>
                 assetData.date.includes(selectedYear) && (
                   <Card key={index}>
-                    <View>
-                      <Card.Title
-                        title={assetData.date}
-                        titleStyle={{ color: theme.colors.primary }}
-                      />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginHorizontal: 5,
+                      }}
+                    >
+                      <Text
+                        variant="titleMedium"
+                        style={{ color: theme.colors.primary, marginLeft: 15 }}
+                      >
+                        {assetData.date}
+                      </Text>
+
                       <CustomIconButtonWithState id={assetData.id} />
                     </View>
 
                     <Card.Content>
                       {assetData.date.includes(selectedYear) && (
                         <View key={assetData.id} style={{ gap: 10 }}>
-                          <AssetData assetData={assetData} id={assetData.id} />
+                          <AssetData assetData={assetData} id={assetData.id} index={index} />
                           <TotalAssets assetData={assetData} />
                         </View>
                       )}
@@ -136,21 +160,20 @@ function PortfolioScreen() {
   );
 }
 
-const AssetData = ({ assetData, id }) => {
+const AssetData = ({ assetData, id, index }) => {
   const theme = useTheme();
 
   const styles = StyleSheet.create({
     screenContainer: {
       padding: 10,
       gap: 10,
-      backgroundColor: theme.colors.elevation.level5,
+      backgroundColor: theme.colors.elevation.level4,
       borderRadius: 10,
-      marginBottom: 20,
     },
   });
 
   return (
-    <>
+    <View style={{ justifyContent: "center", gap: 20 }}>
       <View style={styles.screenContainer}>
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Allgemeines Vermögen
@@ -159,6 +182,7 @@ const AssetData = ({ assetData, id }) => {
           <AssetDataItem key={label} label={label} value={value} id={id} />
         ))}
       </View>
+      <DifferencePercentage index={index} />
       <View style={styles.screenContainer}>
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Aktien Daten
@@ -167,7 +191,7 @@ const AssetData = ({ assetData, id }) => {
           <AssetDataItem key={label} label={label} value={value} id={id} objName="stockData" />
         ))}
       </View>
-    </>
+    </View>
   );
 };
 
@@ -181,9 +205,10 @@ const TotalAssets = ({ assetData }) => {
   return (
     <View
       style={{
+        position: "relative",
         flexDirection: "row",
         padding: 10,
-        backgroundColor: theme.colors.secondary,
+        backgroundColor: theme.colors.green,
         borderRadius: 10,
         justifyContent: "space-between",
       }}

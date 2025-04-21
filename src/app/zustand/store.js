@@ -85,6 +85,9 @@ export const useSubsStore = create((set, get) => ({
 }));
 
 export const useAssetsStore = create((set, get) => ({
+  selectedYear: new Date().getFullYear(),
+  setSelectedYear: (year) => set((state) => ({ selectedYear: year })),
+
   newPortfolioCardIsEdit: false,
   setNewPortfolioCardIsEdit: () =>
     set((state) => ({ newPortfolioCardIsEdit: !state.newPortfolioCardIsEdit })),

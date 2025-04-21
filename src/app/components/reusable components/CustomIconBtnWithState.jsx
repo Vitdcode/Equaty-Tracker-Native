@@ -27,12 +27,6 @@ const CustomIconButtonWithState = ({ id }) => {
       )}
       size={30}
       onPress={handleEditCurrentCard}
-      style={{
-        position: "absolute",
-        top: -5,
-        right: 0,
-        zIndex: 100,
-      }}
     />
   );
 };
