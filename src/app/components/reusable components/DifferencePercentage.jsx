@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useAssetsStore } from "../../zustand/store";
 import { Text, useTheme } from "react-native-paper";
 import { FontAwesome6, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -27,18 +27,38 @@ const DifferencePercentage = ({ index }) => {
   const changeAsNum = sumCurrent - sumPrevious;
   const changePositive = !changeInPercent.toString().includes("-");
 
+  const styles = StyleSheet.create({
+    textStyle: {
+      color: theme.colors.textColor,
+      backgroundColor: "white",
+      padding: 5,
+      borderRadius: 5,
+      color: changePositive ? "green" : theme.colors.red,
+    },
+    iconStyle: {
+      position: "absolute",
+      top: -100,
+      right: 170,
+      backgroundColor: theme.colors.elevation.level1,
+      padding: 7,
+      borderRadius: 50,
+      elevation: 5,
+    },
+  });
+
   return (
     <View
       style={{
         backgroundColor: changePositive ? theme.colors.green : theme.colors.red,
-        padding: 10,
+        padding: 15,
         borderRadius: 12,
         justifyContent: "center",
         gap: 10,
         marginBlock: 20,
+        elevation: 3,
       }}
     >
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+      <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 10 }}>
         <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
           Änderung zu letztem Mal
         </Text>
@@ -47,21 +67,14 @@ const DifferencePercentage = ({ index }) => {
       <FontAwesome6
         name={changePositive ? "arrow-trend-up" : "arrow-trend-down"}
         size={24}
-        color={theme.colors.primary}
-        style={{
-          position: "absolute",
-          top: 5,
-          right: 10,
-          backgroundColor: theme.colors.semiTransparent,
-          padding: 2,
-          borderRadius: 8,
-        }}
+        color={changePositive ? theme.colors.green : theme.colors.red}
+        style={styles.iconStyle}
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
+        <Text variant="titleMedium" style={styles.textStyle}>
           {changePositive ? `+${changeInPercent.toFixed(2)}` : changeInPercent.toFixed(2)}%
         </Text>
-        <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
+        <Text variant="titleMedium" style={styles.textStyle}>
           {changePositive ? `+${changeAsNum.toFixed(2)}` : changeAsNum.toFixed(2)}€
         </Text>
       </View>

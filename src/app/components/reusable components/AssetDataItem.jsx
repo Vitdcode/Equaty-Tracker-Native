@@ -43,13 +43,6 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
             gap: 40,
           }}
         >
-          {/*    <TextInput
-            mode="outlined"
-            label="Name"
-            value={label}
-            onChangeText={(newName) => editAssetName(label, newName, value, id, objName)}
-            style={{ width: "45%" }}
-          /> */}
           <AssetNameInput
             label={label}
             value={value}
@@ -57,9 +50,7 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
             objName={objName}
             editAssetName={editAssetName}
           />
-          <View
-            style={{ flexDirection: "row", /* justifyContent: "flex-end", */ alignItems: "center" }}
-          >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TextInput
               mode="outlined"
               label="Wert"

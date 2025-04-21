@@ -173,9 +173,10 @@ const AssetData = ({ assetData, id, index }) => {
     screenContainer: {
       padding: 15,
       gap: 10,
-      backgroundColor: theme.colors.elevation.level4,
+      backgroundColor: theme.colors.lightGray,
       borderRadius: 10,
       position: "relative",
+      elevation: 2,
     },
   });
 
@@ -250,6 +251,9 @@ const TotalAssets = ({ assetData }) => {
         backgroundColor: theme.colors.green,
         borderRadius: 10,
         justifyContent: "space-between",
+        elevation: 1,
+        borderWidth: 2,
+        borderColor: theme.colors.lightGray,
       }}
     >
       <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>

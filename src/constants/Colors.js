@@ -6,7 +6,7 @@ const Colors = {
     red: "rgb(219, 85, 85)",
     lightRed: "rgba(167, 63, 63, 0.3)",
     gray: "#3b3b3b",
-    lightGray: "rgb(236, 239, 244)",
+    lightGray: "hsl(213, 31.00%, 94.30%)",
     blue: "rgb(70, 122, 172)",
     yellow: "rgb(245, 226, 171)",
     lightYellow: "rgb(248, 243, 228)",

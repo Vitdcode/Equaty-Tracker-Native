@@ -122,7 +122,14 @@ const SubsCard = () => {
   };
 
   return (
-    <Card style={{ padding: 5, position: "relative", marginBottom: 20 }}>
+    <Card
+      style={{
+        padding: 5,
+        position: "relative",
+        marginBottom: 20,
+        backgroundColor: theme.colors.lightGray,
+      }}
+    >
       <IconButton
         icon={() => (
           <MaterialIcons
@@ -143,7 +150,7 @@ const SubsCard = () => {
 
       <Card.Title
         title="Abos"
-        titleStyle={{ color: theme.colors.primary }}
+        titleStyle={{ color: theme.colors.primary, fontWeight: 700 }}
         style={{ marginBottom: 10 }}
       />
       <Card.Content>
@@ -234,6 +241,7 @@ const FixCostsCard = () => {
         padding: 5,
         position: "relative",
         marginBottom: 20,
+        backgroundColor: theme.colors.lightGray,
       }}
     >
       <IconButton
@@ -254,7 +262,7 @@ const FixCostsCard = () => {
         }}
       />
       <Card.Title
-        titleStyle={{ color: theme.colors.primary }}
+        titleStyle={{ color: theme.colors.primary, fontWeight: 700 }}
         style={{ marginBottom: 10 }}
         title="Fix Kosten"
       />
@@ -310,7 +318,11 @@ const MoneyLeftCard = ({ income }) => {
   const sumSubsCost = useSubsStore((state) => state.sum());
   const sum = income - parseFloat(sumFixedCosts) - parseFloat(sumSubsCost);
   return (
-    <Card>
+    <Card
+      style={{
+        backgroundColor: theme.colors.lightGray,
+      }}
+    >
       <Card.Title
         titleStyle={{ color: theme.colors.primary, fontWeight: "700" }}
         title="Geld übrig nach Ausgaben"
@@ -356,7 +368,7 @@ const SumAllCosts = () => {
   const sum = parseFloat(sumFixedCosts) + parseFloat(sumSubsCost);
   return (
     <View style={{ marginTop: 20 }}>
-      <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+      <Text variant="titleMedium" style={{ color: theme.colors.primary, fontWeight: 700 }}>
         Summe aller Kosten
       </Text>
       <View
