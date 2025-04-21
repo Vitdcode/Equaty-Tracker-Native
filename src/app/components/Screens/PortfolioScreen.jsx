@@ -82,7 +82,7 @@ function PortfolioScreen() {
       >
         <Picker
           selectedValue={selectedYear.toString()}
-          onValueChange={(itemValue) => setSelectedYear(itemValue)} // Simplified, itemIndex not needed
+          onValueChange={(itemValue) => setSelectedYear(itemValue)}
           mode="dropdown"
           style={{
             color: theme.colors.textColor,
@@ -131,6 +131,7 @@ function PortfolioScreen() {
                         justifyContent: "space-between",
                         alignItems: "center",
                         marginHorizontal: 5,
+                        padding: newPortfolioCardIsEdit ? 10 : 0,
                       }}
                     >
                       <Text
@@ -144,6 +145,7 @@ function PortfolioScreen() {
                     </View>
 
                     <Card.Content>
+                      <DifferencePercentage index={index} />
                       {assetData.date.includes(selectedYear) && (
                         <View key={assetData.id} style={{ gap: 10 }}>
                           <AssetData assetData={assetData} id={assetData.id} index={index} />
@@ -162,15 +164,22 @@ function PortfolioScreen() {
 
 const AssetData = ({ assetData, id, index }) => {
   const theme = useTheme();
+  const allAssets = useAssetsStore((state) => state.allAssets);
+  const portfolioCardIsEdit = useAssetsStore((state) => state.portfolioCardIsEdit);
+  const portFolioCardId = useAssetsStore((state) => state.portFolioCardId);
+  const addNewEntry = useAssetsStore((state) => state.addNewEntry);
 
   const styles = StyleSheet.create({
     screenContainer: {
-      padding: 10,
+      padding: 15,
       gap: 10,
       backgroundColor: theme.colors.elevation.level4,
       borderRadius: 10,
+      position: "relative",
     },
   });
+
+  const isCardIdBool = portfolioCardIsEdit && portFolioCardId === id;
 
   return (
     <View style={{ justifyContent: "center", gap: 20 }}>
@@ -178,15 +187,45 @@ const AssetData = ({ assetData, id, index }) => {
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Allgemeines Vermögen
         </Text>
+        {portfolioCardIsEdit && isCardIdBool && (
+          <IconButton
+            icon={"plus"}
+            iconColor={theme.colors.textColor}
+            size={25}
+            onPress={() => addNewEntry(id, "generalAssets", "Neu")}
+            style={{
+              position: "absolute",
+              right: 12,
+              top: 3,
+              backgroundColor: theme.colors.secondary,
+              borderRadius: 50,
+            }}
+          />
+        )}
         {Object.entries(assetData["generalAssets"]).map(([label, value]) => (
           <AssetDataItem key={label} label={label} value={value} id={id} />
         ))}
       </View>
-      <DifferencePercentage index={index} />
+
       <View style={styles.screenContainer}>
         <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
           Aktien Daten
         </Text>
+        {portfolioCardIsEdit && isCardIdBool && (
+          <IconButton
+            icon={"plus"}
+            iconColor={theme.colors.textColor}
+            size={25}
+            onPress={() => addNewEntry(id, "stockData", "Neu")}
+            style={{
+              position: "absolute",
+              right: 12,
+              top: 3,
+              backgroundColor: theme.colors.secondary,
+              borderRadius: 50,
+            }}
+          />
+        )}
         {Object.entries(assetData["stockData"]).map(([label, value]) => (
           <AssetDataItem key={label} label={label} value={value} id={id} objName="stockData" />
         ))}

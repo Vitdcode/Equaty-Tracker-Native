@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Text, TextInput } from "react-native-paper";
+import { IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 
 const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
   const newPortfolioCardIsEdit = useAssetsStore((state) => state.newPortfolioCardIsEdit);
   const assets = useAssetsStore((state) => state.allAssets);
-  const editNewAssets = useAssetsStore((state) => state.editNewAssets);
+  const editAssetValue = useAssetsStore((state) => state.editAssetValue);
+  const editAssetName = useAssetsStore((state) => state.editAssetName);
   const portfolioCardIsEdit = useAssetsStore((state) => state.portfolioCardIsEdit);
   const portFolioCardId = useAssetsStore((state) => state.portFolioCardId);
 
   const addNewCardBoolean = newPortfolioCardIsEdit && assets[assets.length - 1].id === id;
   const editCardBoolean = portfolioCardIsEdit && portFolioCardId === id;
+  const deleteEntry = useAssetsStore((state) => state.deleteEntry);
+  const theme = useTheme();
 
-  const handleInputChange = (val) => {
-    editNewAssets(label, val, id, objName);
+  const handleInputChange = (label) => {
+    editNewAssets(label, value, id, objName);
+  };
+
+  const handleDeleteEntry = () => {
+    deleteEntry(id, objName, label);
   };
 
   return (
@@ -27,17 +34,51 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
       }}
     >
       {addNewCardBoolean || editCardBoolean ? (
-        <>
-          <Text variant="titleMedium">{label}</Text>
-          <TextInput
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            gap: 40,
+          }}
+        >
+          {/*    <TextInput
             mode="outlined"
-            label="Wert"
-            value={value?.toString() || ""}
-            onChangeText={handleInputChange}
-            style={{ width: "40%" }}
-            keyboardType="numeric"
+            label="Name"
+            value={label}
+            onChangeText={(newName) => editAssetName(label, newName, value, id, objName)}
+            style={{ width: "45%" }}
+          /> */}
+          <AssetNameInput
+            label={label}
+            value={value}
+            id={id}
+            objName={objName}
+            editAssetName={editAssetName}
           />
-        </>
+          <View
+            style={{ flexDirection: "row", /* justifyContent: "flex-end", */ alignItems: "center" }}
+          >
+            <TextInput
+              mode="outlined"
+              label="Wert"
+              value={value?.toString() || ""}
+              onChangeText={(val) => editAssetValue(label, val, id, objName)}
+              style={{ width: "45%" }}
+              keyboardType="numeric"
+            />
+            <IconButton
+              icon={"delete"}
+              iconColor={theme.colors.gray}
+              size={30}
+              onPress={handleDeleteEntry}
+              style={{
+                width: "20%",
+              }}
+            />
+          </View>
+        </View>
       ) : (
         <>
           <Text variant="titleMedium">{label}</Text>
@@ -45,6 +86,33 @@ const AssetDataItem = ({ label, value, id, objName = "generalAssets" }) => {
         </>
       )}
     </View>
+  );
+};
+
+const AssetNameInput = ({ label, value, id, objName, editAssetName }) => {
+  const [localName, setLocalName] = useState(label);
+
+  // Sync with external changes
+  useEffect(() => {
+    setLocalName(label);
+  }, [label]);
+
+  const handleSubmit = () => {
+    if (localName !== label) {
+      editAssetName(label, localName, value, id, objName);
+    }
+  };
+
+  return (
+    <TextInput
+      mode="outlined"
+      label="Name"
+      value={localName}
+      onChangeText={setLocalName}
+      onBlur={handleSubmit}
+      onSubmitEditing={handleSubmit}
+      style={{ width: "45%" }}
+    />
   );
 };
 

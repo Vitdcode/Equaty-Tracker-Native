@@ -35,6 +35,7 @@ const DifferencePercentage = ({ index }) => {
         borderRadius: 12,
         justifyContent: "center",
         gap: 10,
+        marginBlock: 20,
       }}
     >
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -42,32 +43,6 @@ const DifferencePercentage = ({ index }) => {
           Änderung zu letztem Mal
         </Text>
       </View>
-      {/*       <Fontisto
-        name="line-chart"
-        size={20}
-        color={theme.colors.primary}
-        style={{
-          position: "absolute",
-          top: 5,
-          right: 10,
-          backgroundColor: theme.colors.secondary,
-          padding: 5,
-          borderRadius: 8,
-        }}
-      /> */}
-      {/*       <MaterialCommunityIcons
-        name="chart-line-variant"
-        size={25}
-        color={theme.colors.primary}
-        style={{
-          position: "absolute",
-          top: 5,
-          right: 10,
-          backgroundColor: theme.colors.secondary,
-          padding: 2,
-          borderRadius: 8,
-        }}
-      /> */}
 
       <FontAwesome6
         name={changePositive ? "arrow-trend-up" : "arrow-trend-down"}
@@ -84,10 +59,10 @@ const DifferencePercentage = ({ index }) => {
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
-          {changePositive ? `+${changeAsNum.toFixed(2)}` : changeAsNum.toFixed(2)}€
+          {changePositive ? `+${changeInPercent.toFixed(2)}` : changeInPercent.toFixed(2)}%
         </Text>
         <Text variant="titleMedium" style={{ color: theme.colors.textColor }}>
-          {changePositive ? `+${changeInPercent.toFixed(2)}` : changeInPercent.toFixed(2)}%
+          {changePositive ? `+${changeAsNum.toFixed(2)}` : changeAsNum.toFixed(2)}€
         </Text>
       </View>
     </View>

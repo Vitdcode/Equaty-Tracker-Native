@@ -170,7 +170,7 @@ export const useAssetsStore = create((set, get) => ({
       ],
     })),
 
-  editNewAssets: (field, value, id, objName) =>
+  editAssetValue: (field, value, id, objName) =>
     set((state) => ({
       allAssets: state.allAssets.map((assetData) =>
         assetData.id === id
@@ -184,6 +184,64 @@ export const useAssetsStore = create((set, get) => ({
           : assetData
       ),
     })),
+
+  editAssetName: (oldName, newName, value, id, objName) =>
+    set((state) => ({
+      allAssets: state.allAssets.map((asset) => {
+        if (asset.id === id) {
+          // Create a copy of the object without the old key
+          const { [oldName]: _, ...rest } = asset[objName];
+
+          return {
+            ...asset,
+            [objName]: {
+              ...rest, // Existing fields (excluding the old name)
+              [newName]: value, // Add new field with updated name
+            },
+          };
+        }
+        return asset;
+      }),
+    })),
+
+  addNewEntry: (id, objName, newKey = "", initialVal = 0) =>
+    set((state) => ({
+      allAssets: state.allAssets.map((asset) => {
+        if (asset.id === id) {
+          return {
+            ...asset,
+            [objName]: {
+              ...asset[objName],
+              [newKey]: initialVal,
+            },
+          };
+        }
+        return asset;
+      }),
+    })),
+
+  deleteEntry: (id, objName, field) =>
+    set((state) => ({
+      allAssets: state.allAssets.map((asset) => {
+        if (asset.id === id) {
+          // Create a new object with the filtered property
+          const updatedAsset = {
+            ...asset,
+            [objName]: Object.fromEntries(
+              Object.entries(asset[objName]).filter(([key]) => key !== field)
+            ),
+          };
+          return updatedAsset;
+        }
+        return asset; // Return unchanged assets
+      }),
+    })),
+
+  deleteCard: (id) => {
+    set((state) => ({
+      allAssets: state.allAssets.filter((asset) => asset.id != id),
+    }));
+  },
 }));
 
 export default useCounterStore;
