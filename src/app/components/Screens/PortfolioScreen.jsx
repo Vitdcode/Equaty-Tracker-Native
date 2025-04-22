@@ -7,6 +7,7 @@ import { useAssetsStore } from "../../zustand/store";
 import AssetDataItem from "../reusable components/AssetDataItem";
 import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithState";
 import DifferencePercentage from "../reusable components/DifferencePercentage";
+import getYears from "../../js-functions/availableYears";
 
 function PortfolioScreen() {
   const theme = useTheme();
@@ -32,13 +33,6 @@ function PortfolioScreen() {
     }, 0);
   };
 
-  const getYears = () => {
-    let years = new Set();
-    assets.map((asset) => {
-      years.add(asset.date.split(".")[2]);
-    });
-    return Array.from(years);
-  };
   const years = getYears();
 
   return (

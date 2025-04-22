@@ -31,7 +31,7 @@ const Colors = {
     onError: "rgb(255, 255, 255)",
     errorContainer: "rgb(255, 218, 214)",
     onErrorContainer: "rgb(65, 0, 2)",
-    background: "rgb(240, 240, 237)",
+    background: "rgb(238, 238, 238)",
     onBackground: "rgb(25, 28, 27)",
     surface: "rgb(250, 253, 251)",
     onSurface: "rgb(25, 28, 27)",
