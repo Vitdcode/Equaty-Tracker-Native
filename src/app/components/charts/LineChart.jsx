@@ -3,6 +3,7 @@ import { Dimensions, View, StyleSheet } from "react-native";
 import { IconButton, Text, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 import getYears from "../../js-functions/availableYears";
+import formatDateToGermanMonthYear from "../../js-functions/date-month-year";
 
 const LineDataChart = () => {
   const screenWidth = Dimensions.get("window").width;
@@ -62,6 +63,30 @@ const LineDataChart = () => {
     chart: {
       borderRadius: 10,
     },
+    absoluteCard: {
+      gap: 10,
+      backgroundColor: theme.colors.green,
+      position: "absolute",
+      bottom: "25%",
+      right: "15%",
+      borderRadius: 10,
+      padding: 10,
+    },
+    portfolioText: {
+      fontSize: 20,
+      fontWeight: 700,
+      color: theme.colors.primary,
+      backgroundColor: "white",
+      borderRadius: 10,
+      elevation: 3,
+      padding: 2,
+      textAlign: "center",
+    },
+    amountText: {
+      color: "white",
+      fontSize: 20,
+      textAlign: "center",
+    },
   });
 
   const years = getYears();
@@ -77,6 +102,34 @@ const LineDataChart = () => {
       direction === "left"
         ? setSelectedYearStatistics(years[index - 1])
         : setSelectedYearStatistics(years[index + 1]);
+    }
+  };
+
+  const checkSingleDataPoint = () => {
+    const lastDate = assets[assets.length - 1].date.split(".")[2];
+    const penultimateDate = assets[assets.length - 2].date.split(".")[2];
+    console.log(lastDate != penultimateDate);
+    return lastDate != penultimateDate;
+  };
+
+  const sumGenAssetsByPosition = (assetsData) => {
+    return Object.values(assetsData)
+      .reduce((acc, currentNum) => {
+        return (acc += currentNum);
+      }, 0)
+      .toFixed(0);
+  };
+
+  const lastSumAssets = sumGenAssetsByPosition(assets[assets.length - 1].generalAssets);
+  const penultimateSumAssets = sumGenAssetsByPosition(assets[assets.length - 2].generalAssets);
+
+  const increaseOrDecrease = () => {
+    /*  const sum = lastSumAssets - penultimateSumAssets; */
+    const sum = penultimateSumAssets - lastSumAssets;
+    if (sum > 0) {
+      return `Increase - ${sum}`;
+    } else {
+      return `Decrease ${sum}`;
     }
   };
 
@@ -120,6 +173,17 @@ const LineDataChart = () => {
         bezier
         style={styles.chart}
       />
+      {checkSingleDataPoint() && (
+        <View style={styles.absoluteCard}>
+          <Text style={styles.portfolioText}>
+            {formatDateToGermanMonthYear(assets[assets.length - 2].date)} -{penultimateSumAssets}$
+          </Text>
+          <Text style={styles.portfolioText}>
+            {formatDateToGermanMonthYear(assets[assets.length - 1].date)} -{lastSumAssets}$
+          </Text>
+          <Text style={styles.portfolioText}>{increaseOrDecrease()}$</Text>
+        </View>
+      )}
     </View>
   );
 };
