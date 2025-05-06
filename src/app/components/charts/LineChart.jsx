@@ -65,22 +65,32 @@ const LineDataChart = () => {
     },
     absoluteCard: {
       gap: 10,
-      backgroundColor: theme.colors.green,
       position: "absolute",
       bottom: "25%",
       right: "15%",
       borderRadius: 10,
       padding: 10,
     },
+    absoluteCardPositive: {
+      backgroundColor: theme.colors.green,
+    },
+    absoluteCardNegative: {
+      backgroundColor: theme.colors.red,
+    },
     portfolioText: {
       fontSize: 20,
       fontWeight: 700,
-      color: theme.colors.primary,
       backgroundColor: "white",
       borderRadius: 10,
       elevation: 3,
       padding: 2,
       textAlign: "center",
+    },
+    portfolioTextNegative: {
+      color: theme.colors.red,
+    },
+    portfolioTextPositive: {
+      color: theme.colors.primary,
     },
     amountText: {
       color: "white",
@@ -92,7 +102,7 @@ const LineDataChart = () => {
   const years = getYears();
 
   const handleYearChange = (direction) => {
-    let index = years.findIndex((year) => year === selectedYearStatistics.toString());
+    let index = years.findIndex((year) => year === selectedYearStatistics);
 
     if (index === 0 && direction === "left") {
       setSelectedYearStatistics(years[years.length - 1]);
@@ -106,9 +116,10 @@ const LineDataChart = () => {
   };
 
   const checkSingleDataPoint = () => {
+    if (assets.length === 0 || assets.length === 1) return;
+    if (selectedYearStatistics != assets[assets.length - 1].date.split(".")[2]) return;
     const lastDate = assets[assets.length - 1].date.split(".")[2];
     const penultimateDate = assets[assets.length - 2].date.split(".")[2];
-    console.log(lastDate != penultimateDate);
     return lastDate != penultimateDate;
   };
 
@@ -122,14 +133,14 @@ const LineDataChart = () => {
 
   const lastSumAssets = sumGenAssetsByPosition(assets[assets.length - 1].generalAssets);
   const penultimateSumAssets = sumGenAssetsByPosition(assets[assets.length - 2].generalAssets);
+  const sumAssets = lastSumAssets - penultimateSumAssets;
 
   const increaseOrDecrease = () => {
     /*  const sum = lastSumAssets - penultimateSumAssets; */
-    const sum = penultimateSumAssets - lastSumAssets;
-    if (sum > 0) {
-      return `Increase - ${sum}`;
+    if (sumAssets > 0) {
+      return `Increase = ${sumAssets}€`;
     } else {
-      return `Decrease ${sum}`;
+      return `Decrease = ${sumAssets}€`;
     }
   };
 
@@ -174,14 +185,26 @@ const LineDataChart = () => {
         style={styles.chart}
       />
       {checkSingleDataPoint() && (
-        <View style={styles.absoluteCard}>
+        <View
+          style={[
+            styles.absoluteCard,
+            sumAssets > 0 ? styles.absoluteCardPositive : styles.absoluteCardNegative,
+          ]}
+        >
           <Text style={styles.portfolioText}>
-            {formatDateToGermanMonthYear(assets[assets.length - 2].date)} -{penultimateSumAssets}$
+            {formatDateToGermanMonthYear(assets[assets.length - 2].date)} = {penultimateSumAssets}€
           </Text>
           <Text style={styles.portfolioText}>
-            {formatDateToGermanMonthYear(assets[assets.length - 1].date)} -{lastSumAssets}$
+            {formatDateToGermanMonthYear(assets[assets.length - 1].date)} = {lastSumAssets}€
           </Text>
-          <Text style={styles.portfolioText}>{increaseOrDecrease()}$</Text>
+          <Text
+            style={[
+              styles.portfolioText,
+              sumAssets > 0 ? styles.portfolioTextPositive : styles.portfolioTextNegative,
+            ]}
+          >
+            {increaseOrDecrease()}
+          </Text>
         </View>
       )}
     </View>
