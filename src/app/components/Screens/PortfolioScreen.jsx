@@ -8,6 +8,7 @@ import AssetDataItem from "../reusable components/AssetDataItem";
 import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithState";
 import DifferencePercentage from "../reusable components/DifferencePercentage";
 import getYears from "../../js-functions/availableYears";
+import portfolioSum from "../../js-functions/portfolioSum";
 
 function PortfolioScreen() {
   const theme = useTheme();
@@ -25,12 +26,6 @@ function PortfolioScreen() {
     if (!newPortfolioCardIsEdit) {
       setNewAssetsData();
     }
-  };
-
-  const portfolioSum = () => {
-    return Object.values(assets[assets.length - 1]["generalAssets"]).reduce((acc, value) => {
-      return (acc += parseFloat(value));
-    }, 0);
   };
 
   const years = getYears();
@@ -58,7 +53,7 @@ function PortfolioScreen() {
       >
         <Text style={{ color: "white", fontWeight: "bold", marginTop: 58 }}>Portfolio</Text>
         <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
-          {Number(portfolioSum()).toLocaleString("de-DE")}€
+          {Number(portfolioSum(assets)).toLocaleString("de-DE")}€
         </Text>
       </LinearGradient>
       <View

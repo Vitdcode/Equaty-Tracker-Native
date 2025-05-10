@@ -44,8 +44,17 @@ const LineDataChart = () => {
     .filter((asset) => asset.date.includes(selectedYearStatistics))
     .map((filteredAsset) =>
       Object.values(filteredAsset["generalAssets"]).reduce((acc, currentNum) => {
-        acc += currentNum;
-        return acc;
+        /*       (typeof currentNum);
+        (currentNum.length); */
+        /*   (filteredAsset["generalAssets"]); */
+        if (typeof currentNum === "string" && currentNum.length === 0) {
+          acc += 0;
+          return acc;
+        } else {
+          currentNum;
+          acc += parseFloat(currentNum);
+          return acc;
+        }
       }, 0)
     );
 
@@ -102,8 +111,7 @@ const LineDataChart = () => {
   const years = getYears();
 
   const handleYearChange = (direction) => {
-    let index = years.findIndex((year) => year === selectedYearStatistics);
-
+    let index = years.findIndex((year) => year == selectedYearStatistics);
     if (index === 0 && direction === "left") {
       setSelectedYearStatistics(years[years.length - 1]);
     } else if (index === years.length - 1 && direction === "right") {
@@ -126,7 +134,10 @@ const LineDataChart = () => {
   const sumGenAssetsByPosition = (assetsData) => {
     return Object.values(assetsData)
       .reduce((acc, currentNum) => {
-        return (acc += currentNum);
+        if (typeof currentNum === "string" && currentNum.length === 0) {
+          acc += 0;
+        }
+        return (acc += parseFloat(currentNum));
       }, 0)
       .toFixed(0);
   };

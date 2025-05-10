@@ -102,7 +102,8 @@ export const useAssetsStore = create((set, get) => ({
   portFolioCardId: null,
   setPortfolioCardId: (id) => set((state) => ({ portFolioCardId: id })),
 
-  /*   allAssets: [ //real data
+  allAssets: [
+    //real data
     {
       id: Crypto.randomUUID(),
       name: "General Assets",
@@ -151,9 +152,43 @@ export const useAssetsStore = create((set, get) => ({
         XRP: 2.87,
       },
     },
-  ], */
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "01.05.2025",
+      generalAssets: {
+        Investiert: 30241,
+        "Cash Trade Republic": 4015,
+        "C24 Tagesgeld": 1707,
+        Cash: 3000,
+      },
+      stockData: {
+        "S&P 500": 524,
+        Gold: 56,
+        Bitcon: 83822,
+        XRP: 1.9,
+      },
+    },
+    /*     {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "01.08.2025",
+      generalAssets: {
+        Investiert: 40241,
+        "Cash Trade Republic": 4015,
+        "C24 Tagesgeld": 1707,
+        Cash: 3000,
+      },
+      stockData: {
+        "S&P 500": 524,
+        Gold: 56,
+        Bitcon: 83822,
+        XRP: 1.9,
+      },
+    }, */
+  ],
 
-  allAssets: [
+  /*  allAssets: [
     // dummy data for chart testing
     // 2024 (Q1-Q4)
     {
@@ -304,7 +339,7 @@ export const useAssetsStore = create((set, get) => ({
       },
       stockData: { "S&P 500": 735.4 },
     },
-  ],
+  ], */
 
   setNewAsset: () =>
     set((state) => ({
