@@ -100,63 +100,64 @@ const StatisticsScreen = () => {
   const comparePortfolio = comparePortfolios();
 
   return (
-    <ScrollView
-      style={{
-        width: "100%",
-        /*   marginTop: 10, */
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}
-      contentContainerStyle={{
-        paddingTop: 40,
-        alignItems: "center",
-      }}
-      /* fadingEdgeLength={30} */
-    >
-      <Text variant="displaySmall" style={{ color: theme.colors.textColor }}>
-        Statistiken
-      </Text>
-      <View style={styles.cardStyle}>
-        <Text style={styles.titleStyle}>Portfolio vom {assets[assets.length - 1]?.date}</Text>
-        <Text style={styles.portfolioText}>{portfolioSum(assets).toLocaleString("de-DE")}€</Text>
-        <View
-          style={
-            comparePortfolio > 0
-              ? styles.growthCard
-              : [styles.growthCard, styles.growthCardNegative]
-          }
-        >
-          <Text
-            style={
-              comparePercantage > 0
-                ? styles.portfolioText
-                : [styles.portfolioText, styles.portfolioTextNegative]
-            }
-          >
-            {comparePercantage}%
-          </Text>
-          <Text
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <ScrollView
+        style={{
+          width: "100%",
+          marginTop: 50,
+          flex: 1,
+          backgroundColor: theme.colors.background,
+        }}
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+        fadingEdgeLength={20}
+      >
+        <Text variant="displaySmall" style={{ color: theme.colors.textColor }}>
+          Statistiken
+        </Text>
+        <View style={styles.cardStyle}>
+          <Text style={styles.titleStyle}>Portfolio vom {assets[assets.length - 1]?.date}</Text>
+          <Text style={styles.portfolioText}>{portfolioSum(assets).toLocaleString("de-DE")}€</Text>
+          <View
             style={
               comparePortfolio > 0
-                ? styles.portfolioText
-                : [styles.portfolioText, styles.portfolioTextNegative]
+                ? styles.growthCard
+                : [styles.growthCard, styles.growthCardNegative]
             }
           >
-            {comparePortfolio}€
-          </Text>
-          <Text style={[styles.titleStyle, styles.titleStyleColorWhite]}>
-            {" "}
-            Vergleich zum {assets[0]?.date}
-          </Text>
-          <Text style={[styles.titleStyle, styles.titleStyleColorWhite]}>
-            {" "}
-            ~ {getApproximateYearsBetweenDates()} Jahre
-          </Text>
+            <Text
+              style={
+                comparePercantage > 0
+                  ? styles.portfolioText
+                  : [styles.portfolioText, styles.portfolioTextNegative]
+              }
+            >
+              {comparePercantage}%
+            </Text>
+            <Text
+              style={
+                comparePortfolio > 0
+                  ? styles.portfolioText
+                  : [styles.portfolioText, styles.portfolioTextNegative]
+              }
+            >
+              {comparePortfolio}€
+            </Text>
+            <Text style={[styles.titleStyle, styles.titleStyleColorWhite]}>
+              {" "}
+              Vergleich zum {assets[0]?.date}
+            </Text>
+            <Text style={[styles.titleStyle, styles.titleStyleColorWhite]}>
+              {" "}
+              ~ {getApproximateYearsBetweenDates()} Jahre
+            </Text>
+          </View>
         </View>
-      </View>
-      <LineDataChart />
-      <PieChartYears />
-    </ScrollView>
+        <LineDataChart />
+        <PieChartYears />
+      </ScrollView>
+    </View>
   );
 };
 

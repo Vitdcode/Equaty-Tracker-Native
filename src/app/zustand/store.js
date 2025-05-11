@@ -169,7 +169,7 @@ export const useAssetsStore = create((set, get) => ({
         XRP: 1.9,
       },
     },
-    /*     {
+    /* {
       id: Crypto.randomUUID(),
       name: "General Assets",
       date: "01.08.2025",
@@ -187,6 +187,251 @@ export const useAssetsStore = create((set, get) => ({
       },
     }, */
   ],
+
+  /* allAssets: [
+    // 7 year dummy data
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2018",
+      generalAssets: {
+        Investiert: 10771,
+        "Cash Trade Republic": 2145,
+        "C24 Tagesgeld": 923,
+        Cash: 1541,
+      },
+      stockData: {
+        "S&P 500": 307.78,
+        sum: 15380,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2018",
+      generalAssets: {
+        Investiert: 12148,
+        "Cash Trade Republic": 2005,
+        "C24 Tagesgeld": 957,
+        Cash: 1478,
+      },
+      stockData: {
+        "S&P 500": 328.02,
+        sum: 16588,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2019",
+      generalAssets: {
+        Investiert: 13221,
+        "Cash Trade Republic": 1998,
+        "C24 Tagesgeld": 1070,
+        Cash: 1612,
+      },
+      stockData: {
+        "S&P 500": 344.03,
+        sum: 17901,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2019",
+      generalAssets: {
+        Investiert: 14723,
+        "Cash Trade Republic": 2086,
+        "C24 Tagesgeld": 1119,
+        Cash: 1532,
+      },
+      stockData: {
+        "S&P 500": 362.78,
+        sum: 19460,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2020",
+      generalAssets: {
+        Investiert: 16018,
+        "Cash Trade Republic": 1907,
+        "C24 Tagesgeld": 1002,
+        Cash: 1603,
+      },
+      stockData: {
+        "S&P 500": 385.45,
+        sum: 19530,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2020",
+      generalAssets: {
+        Investiert: 17280,
+        "Cash Trade Republic": 2078,
+        "C24 Tagesgeld": 1128,
+        Cash: 1495,
+      },
+      stockData: {
+        "S&P 500": 405.12,
+        sum: 21029,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2021",
+      generalAssets: {
+        Investiert: 18675,
+        "Cash Trade Republic": 2155,
+        "C24 Tagesgeld": 1063,
+        Cash: 1577,
+      },
+      stockData: {
+        "S&P 500": 427.89,
+        sum: 23470,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2021",
+      generalAssets: {
+        Investiert: 20012,
+        "Cash Trade Republic": 1980,
+        "C24 Tagesgeld": 985,
+        Cash: 1488,
+      },
+      stockData: {
+        "S&P 500": 448.56,
+        sum: 24465,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2022",
+      generalAssets: {
+        Investiert: 21505,
+        "Cash Trade Republic": 2100,
+        "C24 Tagesgeld": 1010,
+        Cash: 1530,
+      },
+      stockData: {
+        "S&P 500": 470.23,
+        sum: 26145,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2022",
+      generalAssets: {
+        Investiert: 22998,
+        "Cash Trade Republic": 2210,
+        "C24 Tagesgeld": 1150,
+        Cash: 1650,
+      },
+      stockData: {
+        "S&P 500": 492.89,
+        sum: 28008,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2023",
+      generalAssets: {
+        Investiert: 24500,
+        "Cash Trade Republic": 2350,
+        "C24 Tagesgeld": 1200,
+        Cash: 1700,
+      },
+      stockData: {
+        "S&P 500": 515.45,
+        sum: 29750,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2023",
+      generalAssets: {
+        Investiert: 26000,
+        "Cash Trade Republic": 2500,
+        "C24 Tagesgeld": 1300,
+        Cash: 1800,
+      },
+      stockData: {
+        "S&P 500": 538.12,
+        sum: 31600,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.03.2024",
+      generalAssets: {
+        Investiert: 27500,
+        "Cash Trade Republic": 2650,
+        "C24 Tagesgeld": 1400,
+        Cash: 1900,
+      },
+      stockData: {
+        "S&P 500": 561.78,
+        sum: 33450,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "15.09.2024",
+      generalAssets: {
+        Investiert: 29000,
+        "Cash Trade Republic": 2800,
+        "C24 Tagesgeld": 1500,
+        Cash: 2000,
+      },
+      stockData: {
+        "S&P 500": 585.45,
+        sum: 35300,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "01.05.2025",
+      generalAssets: {
+        Investiert: 30241,
+        "Cash Trade Republic": 4015,
+        "C24 Tagesgeld": 1707,
+        Cash: 3000,
+      },
+      stockData: {
+        "S&P 500": 524,
+        Gold: 56,
+        Bitcon: 83822,
+        XRP: 1.9,
+      },
+    },
+    {
+      id: Crypto.randomUUID(),
+      name: "General Assets",
+      date: "01.08.2025",
+      generalAssets: {
+        Investiert: 40241,
+        "Cash Trade Republic": 4015,
+        "C24 Tagesgeld": 1707,
+        Cash: 3000,
+      },
+      stockData: {
+        "S&P 500": 524,
+      },
+    },
+  ], */
 
   /*  allAssets: [
     // dummy data for chart testing
