@@ -104,7 +104,7 @@ const StatisticsScreen = () => {
       <ScrollView
         style={{
           width: "100%",
-          marginTop: 50,
+          marginTop: 55,
           flex: 1,
           backgroundColor: theme.colors.background,
         }}

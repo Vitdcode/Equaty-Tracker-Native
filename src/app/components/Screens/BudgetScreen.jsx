@@ -24,9 +24,9 @@ const BudgetScreen = () => {
       }}
     >
       <LinearGradient
-        colors={["rgba(79, 196, 141, 0.58)", "rgba(49, 185, 155, 0.6)"]}
+        colors={["#5A8D6F", "#A0D9A0"]}
         start={{ x: 0, y: 0 }} // Top-left
-        end={{ x: 1, y: 1 }} // Bottom-right (135deg direction)
+        end={{ x: 0, y: 1 }} // Bottom-right (135deg direction)
         style={{
           height: "25%",
           width: "100%",
@@ -46,7 +46,7 @@ const BudgetScreen = () => {
         ) : (
           <TextInput
             label="Verdienst anpassen"
-            value={income}
+            value={String(income)}
             onChangeText={setIncome}
             returnKeyType="send"
             /*       onSubmitEditing={}  send to backend for later*/

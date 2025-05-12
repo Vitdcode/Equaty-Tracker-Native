@@ -40,9 +40,9 @@ function PortfolioScreen() {
       }}
     >
       <LinearGradient
-        colors={[theme.colors.secondary, theme.colors.secondary]}
+        colors={["#5A8D6F", "#A0D9A0"]}
         start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        end={{ x: 0, y: 1 }}
         style={{
           height: "25%",
           width: "100%",
