@@ -1,14 +1,15 @@
 import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Card, IconButton, Text, useTheme } from "react-native-paper";
+import { Button, Card, IconButton, Text, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 import AssetDataItem from "../reusable components/AssetDataItem";
 import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithState";
 import DifferencePercentage from "../reusable components/DifferencePercentage";
 import getYears from "../../js-functions/availableYears";
 import portfolioSum from "../../js-functions/portfolioSum";
+import updateData from "../../../backend/updateData";
 
 function PortfolioScreen() {
   const theme = useTheme();
@@ -29,6 +30,10 @@ function PortfolioScreen() {
   };
 
   const years = getYears();
+
+  useEffect(() => {
+    updateData.updateAssets(assets);
+  }, [newPortfolioCardIsEdit]);
 
   return (
     <View
@@ -55,6 +60,13 @@ function PortfolioScreen() {
         <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
           {Number(portfolioSum(assets)).toLocaleString("de-DE")}€
         </Text>
+        <Button
+          mode="contained"
+          style={{ position: "absolute", top: 0, right: 0 }}
+          onPress={() => updateData.updateAssets(assets)}
+        >
+          Postgres Test
+        </Button>
       </LinearGradient>
       <View
         style={{

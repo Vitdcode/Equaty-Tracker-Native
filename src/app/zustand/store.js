@@ -38,6 +38,11 @@ export const useFixCostsStore = create((set, get) => ({
       fixCosts: state.fixCosts.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
     })),
 
+  deleteFixCost: (name) =>
+    set((state) => ({
+      fixCosts: state.fixCosts.filter((item) => item.name != name),
+    })),
+
   sum: () => {
     const { fixCosts } = get();
     let total = 0;
@@ -67,6 +72,11 @@ export const useSubsStore = create((set, get) => ({
   editSub: (index, field, value) =>
     set((state) => ({
       subs: state.subs.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
+    })),
+
+  deleteSub: (name) =>
+    set((state) => ({
+      subs: state.subs.filter((item) => item.name != name),
     })),
 
   sum: () => {

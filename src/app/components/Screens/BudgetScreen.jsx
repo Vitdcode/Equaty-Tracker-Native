@@ -1,6 +1,6 @@
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Card, Divider, IconButton, Text, TextInput, useTheme } from "react-native-paper";
@@ -8,6 +8,7 @@ import { useFixCostsStore, useMoneyStore, useSubsStore } from "../../zustand/sto
 import CostItem, { CostItemTextInput } from "../reusable components/CostItem";
 import CustomIconButton from "../reusable components/CustomIconButton";
 import NewCostInputs from "../reusable components/NewCostInputs";
+import updateData from "../../../backend/updateData";
 
 const BudgetScreen = () => {
   const theme = useTheme();
@@ -115,10 +116,15 @@ const SubsCard = () => {
     setNewSubCostTextInputIsVisible(!newSubCostTextInputIsVisible);
   };
 
+  useEffect(() => {
+    updateData.updateSubs(subs);
+  }, [subsIsEditMode, newSubCostTextInputIsVisible]);
+
   const handleCancelNewSub = () => {
     setNewSubCostTextInputIsVisible(!newSubCostTextInputIsVisible);
     setSubCostEntryName("");
     setSubCostEntrySum("");
+    updateData.updateSubs(subs);
   };
 
   return (
@@ -159,11 +165,12 @@ const SubsCard = () => {
             <CostItem key={index} name={obj?.name} value={obj?.cost} />
           ) : (
             <CostItemTextInput
-              key={index}
+              key={obj.name}
               index={index}
               name={obj?.name}
               value={obj?.cost}
               editFixedItem={editSubs}
+              selectedCard="subs"
             />
           )
         )}
@@ -235,6 +242,10 @@ const FixCostsCard = () => {
     setFixCostEntrySum("");
   };
 
+  useEffect(() => {
+    updateData.updateFixCosts(fixCosts);
+  }, [editFixCosts, newFixCostTextInputIsVisible]);
+
   return (
     <Card
       style={{
@@ -272,7 +283,7 @@ const FixCostsCard = () => {
             <CostItem key={index} name={obj?.name} value={obj?.cost} />
           ) : (
             <CostItemTextInput
-              key={index}
+              key={obj.name}
               index={index}
               name={obj?.name}
               value={obj?.cost}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IconButton, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 import { View } from "react-native";
+import updateData from "../../../backend/updateData";
 
 const CustomIconButtonWithState = ({ id }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -21,6 +22,8 @@ const CustomIconButtonWithState = ({ id }) => {
       setPortfolioCardIsEdit();
       setPortfolioCardId(id);
     }
+
+    updateData.updateAssets(assets);
   };
 
   const handleDeleteCard = () => {

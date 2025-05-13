@@ -1,6 +1,8 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { View } from "react-native";
-import { Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
+import { useFixCostsStore, useSubsStore } from "../../zustand/store";
 
 const CostItem = ({ name, value }) => {
   const num =
@@ -16,7 +18,15 @@ const CostItem = ({ name, value }) => {
   );
 };
 
-export const CostItemTextInput = ({ index, name, value, editFixedItem }) => {
+export const CostItemTextInput = ({
+  index,
+  name,
+  value,
+  editFixedItem,
+  selectedCard = "fixCost",
+}) => {
+  const deleteFixCost = useFixCostsStore((state) => state.deleteFixCost);
+  const deleteSub = useSubsStore((state) => state.deleteSub);
   const [nameInput, setNameInput] = useState(name);
   const [costInput, setCostInput] = useState(value);
 
@@ -25,8 +35,23 @@ export const CostItemTextInput = ({ index, name, value, editFixedItem }) => {
     editFixedItem(index, name, val);
   };
 
+  const handleDelete = () => {
+    if (selectedCard === "fixCost") {
+      deleteFixCost(name);
+    } else {
+      deleteSub(name);
+    }
+  };
+
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 10,
+      }}
+    >
       <TextInput
         mode="outlined"
         label="Name"
@@ -34,6 +59,7 @@ export const CostItemTextInput = ({ index, name, value, editFixedItem }) => {
         onChangeText={(val) => handleInputChange("name", val)}
         style={{ width: "40%" }}
       />
+      <MaterialCommunityIcons name="delete" size={24} color="black" onPress={handleDelete} />
       <TextInput
         mode="outlined"
         label="Betrag"

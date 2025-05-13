@@ -36,4 +36,9 @@ yarn-error.*
 *.tsbuildinfo
 
 android
-env
+.env
+app.json
+
+src/backend/equaty-tracker-data.json
+src/backend/fixed-costs-data.json
+src/backend/subscriptions-data.json
