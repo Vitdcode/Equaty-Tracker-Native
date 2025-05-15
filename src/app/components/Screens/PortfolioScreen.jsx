@@ -9,7 +9,8 @@ import CustomIconButtonWithState from "../reusable components/CustomIconBtnWithS
 import DifferencePercentage from "../reusable components/DifferencePercentage";
 import getYears from "../../js-functions/availableYears";
 import portfolioSum from "../../js-functions/portfolioSum";
-import updateData from "../../../backend/updateData";
+import updateData from "../../updateDataApis";
+import getPortfolioData from "../../getDataApis";
 
 function PortfolioScreen() {
   const theme = useTheme();
@@ -22,18 +23,27 @@ function PortfolioScreen() {
   const assets = useAssetsStore((state) => state.allAssets);
   const setNewAssetsData = useAssetsStore((state) => state.setNewAsset);
 
+  const setAssetsOnAppLoad = useAssetsStore((state) => state.setAssetsOnAppLoad);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getPortfolioData.getAssets();
+      if (data.length > 0) setAssetsOnAppLoad(data);
+    }
+    fetchData();
+  }, []);
+
   const handleSetNewAssetsCard = () => {
     setNewPortfolioCardIsEdit();
     if (!newPortfolioCardIsEdit) {
       setNewAssetsData();
     }
+    if (newPortfolioCardIsEdit) {
+      updateData.updateAssets(assets);
+    }
   };
 
   const years = getYears();
-
-  useEffect(() => {
-    updateData.updateAssets(assets);
-  }, [newPortfolioCardIsEdit]);
 
   return (
     <View
@@ -60,13 +70,6 @@ function PortfolioScreen() {
         <Text variant="headlineLarge" style={{ color: "white", fontWeight: "bold" }}>
           {Number(portfolioSum(assets)).toLocaleString("de-DE")}€
         </Text>
-        <Button
-          mode="contained"
-          style={{ position: "absolute", top: 0, right: 0 }}
-          onPress={() => updateData.updateAssets(assets)}
-        >
-          Postgres Test
-        </Button>
       </LinearGradient>
       <View
         style={{

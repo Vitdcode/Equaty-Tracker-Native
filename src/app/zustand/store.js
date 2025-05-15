@@ -1,12 +1,8 @@
 import { create } from "zustand";
 import metricDate from "../js-functions/date-metric-format";
 import * as Crypto from "expo-crypto";
-
-const useCounterStore = create((set) => ({
-  count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  decrement: () => set((state) => ({ count: state.count - 1 })),
-}));
+import getPortfolioData from "../getDataApis";
+import updateData from "../updateDataApis";
 
 export const useMoneyStore = create((set) => ({
   income: 2700,
@@ -28,10 +24,18 @@ export const useFixCostsStore = create((set, get) => ({
     { name: "Investment", cost: "800.00" },
   ],
 
-  setNewFixCost: (name, value) =>
+  setFixCostsOnAppLoad: (assets) =>
     set((state) => ({
-      fixCosts: [...state.fixCosts, { name: name, cost: value }],
+      fixCosts: assets,
     })),
+
+  setNewFixCost: (name, value) => {
+    set((state) => {
+      const newFixCosts = [...state.fixCosts, { name: name, cost: value }];
+      updateData.updateFixCosts(newFixCosts);
+      return { fixCosts: newFixCosts };
+    });
+  },
 
   editFixItem: (index, field, value) =>
     set((state) => ({
@@ -64,10 +68,21 @@ export const useSubsStore = create((set, get) => ({
     { name: "Gym", cost: "33.9" },
   ],
 
-  setNewSub: (name, value) =>
+  setSubsOnAppLoad: (assets) =>
     set((state) => ({
-      subs: [...state.subs, { name: name, cost: value }],
+      subs: assets,
     })),
+
+  setNewSub: (name, value) => {
+    set((state) => {
+      const newSubs = [...state.subs, { name, cost: value }];
+
+      // Call your backend update function here with the latest data
+      updateData.updateSubs(newSubs);
+
+      return { subs: newSubs };
+    });
+  },
 
   editSub: (index, field, value) =>
     set((state) => ({
@@ -162,23 +177,7 @@ export const useAssetsStore = create((set, get) => ({
         XRP: 2.87,
       },
     },
-    {
-      id: Crypto.randomUUID(),
-      name: "General Assets",
-      date: "01.05.2025",
-      generalAssets: {
-        Investiert: 30241,
-        "Cash Trade Republic": 4015,
-        "C24 Tagesgeld": 1707,
-        Cash: 3000,
-      },
-      stockData: {
-        "S&P 500": 524,
-        Gold: 56,
-        Bitcon: 83822,
-        XRP: 1.9,
-      },
-    },
+
     /* {
       id: Crypto.randomUUID(),
       name: "General Assets",
@@ -596,6 +595,11 @@ export const useAssetsStore = create((set, get) => ({
     },
   ], */
 
+  setAssetsOnAppLoad: (assets) =>
+    set((state) => ({
+      allAssets: assets,
+    })),
+
   setNewAsset: () =>
     set((state) => ({
       allAssets: [
@@ -603,6 +607,7 @@ export const useAssetsStore = create((set, get) => ({
         {
           id: Crypto.randomUUID(), // Add a unique ID for easier manipulation
           date: metricDate(),
+          name: "General Assets",
           generalAssets: {
             Investiert: 0,
             "Cash Trade Republic": 0,
@@ -689,5 +694,3 @@ export const useAssetsStore = create((set, get) => ({
     }));
   },
 }));
-
-export default useCounterStore;

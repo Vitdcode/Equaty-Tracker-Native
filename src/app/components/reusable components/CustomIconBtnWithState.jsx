@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IconButton, useTheme } from "react-native-paper";
 import { useAssetsStore } from "../../zustand/store";
 import { View } from "react-native";
-import updateData from "../../../backend/updateData";
+import updateData from "../../updateDataApis";
 
 const CustomIconButtonWithState = ({ id }) => {
   const [isEdit, setIsEdit] = useState(false);

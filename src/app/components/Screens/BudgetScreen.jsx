@@ -8,7 +8,8 @@ import { useFixCostsStore, useMoneyStore, useSubsStore } from "../../zustand/sto
 import CostItem, { CostItemTextInput } from "../reusable components/CostItem";
 import CustomIconButton from "../reusable components/CustomIconButton";
 import NewCostInputs from "../reusable components/NewCostInputs";
-import updateData from "../../../backend/updateData";
+import updateData from "../../updateDataApis";
+import getPortfolioData from "../../getDataApis";
 
 const BudgetScreen = () => {
   const theme = useTheme();
@@ -94,7 +95,8 @@ const SubsCard = () => {
   const [newSubCostTextInputIsVisible, setNewSubCostTextInputIsVisible] = useState(false);
   const [subCostEntryName, setSubCostEntryName] = useState("");
   const [subCostEntrySum, setSubCostEntrySum] = useState("");
-  const { setNewSub } = useSubsStore();
+  const setNewSub = useSubsStore((state) => state.setNewSub);
+  const setSubsOnAppLoad = useSubsStore((state) => state.setSubsOnAppLoad);
   const editSubs = useSubsStore((state) => state.editSub);
   const [subsIsEditMode, setSubsIsEditMode] = useState(false);
 
@@ -117,8 +119,17 @@ const SubsCard = () => {
   };
 
   useEffect(() => {
-    updateData.updateSubs(subs);
-  }, [subsIsEditMode, newSubCostTextInputIsVisible]);
+    async function getData() {
+      const data = await getPortfolioData.getSubs();
+      if (data.length > 0) setSubsOnAppLoad(data);
+    }
+    getData();
+  }, []);
+
+  const handleSubEditMode = () => {
+    if (subsIsEditMode) updateData.updateSubs(subs);
+    setSubsIsEditMode(!subsIsEditMode);
+  };
 
   const handleCancelNewSub = () => {
     setNewSubCostTextInputIsVisible(!newSubCostTextInputIsVisible);
@@ -145,7 +156,7 @@ const SubsCard = () => {
           />
         )}
         size={30}
-        onPress={() => setSubsIsEditMode(!subsIsEditMode)}
+        onPress={handleSubEditMode}
         style={{
           position: "absolute",
           top: -5,
@@ -212,11 +223,11 @@ const FixCostsCard = () => {
   const fixCosts = useFixCostsStore((state) => state.fixCosts);
   const editFixedItem = useFixCostsStore((state) => state.editFixItem);
   const sumFixedCosts = useFixCostsStore((state) => state.sum());
+  const setNewFixCost = useFixCostsStore((state) => state.setNewFixCost);
 
   const [newFixCostTextInputIsVisible, setNewFixCostTextInputIsVisible] = useState(false);
   const [fixCostEntryName, setFixCostEntryName] = useState("");
   const [fixCostEntrySum, setFixCostEntrySum] = useState("");
-  const { setNewFixCost } = useFixCostsStore();
 
   const handleSubmitNewFixCost = () => {
     if (newFixCostTextInputIsVisible) {
@@ -242,9 +253,14 @@ const FixCostsCard = () => {
     setFixCostEntrySum("");
   };
 
-  useEffect(() => {
+  const handleEditFixCosts = () => {
+    if (editFixCosts) updateData.updateFixCosts(fixCosts);
+    setEditFixCosts(!editFixCosts);
+  };
+
+  /*  useEffect(() => {
     updateData.updateFixCosts(fixCosts);
-  }, [editFixCosts, newFixCostTextInputIsVisible]);
+  }, [editFixCosts, newFixCostTextInputIsVisible]); */
 
   return (
     <Card
@@ -264,7 +280,7 @@ const FixCostsCard = () => {
           />
         )}
         size={30}
-        onPress={() => setEditFixCosts(!editFixCosts)}
+        onPress={handleEditFixCosts}
         style={{
           position: "absolute",
           top: -5,

@@ -5,7 +5,7 @@ const updateData = {
 
   updateAssets: async (data) => {
     try {
-      fetch(`${updateData.apiUrl}/assets`, {
+      await fetch(`${updateData.apiUrl}/assets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -18,7 +18,7 @@ const updateData = {
   },
   updateFixCosts: async (data) => {
     try {
-      fetch(`${updateData.apiUrl}/fixed-costs`, {
+      await fetch(`${updateData.apiUrl}/fixed-costs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -30,9 +30,8 @@ const updateData = {
     }
   },
   updateSubs: async (data) => {
-    console.log(data);
     try {
-      fetch(`${updateData.apiUrl}/subscriptions`, {
+      await fetch(`${updateData.apiUrl}/subscriptions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

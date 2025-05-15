@@ -5,6 +5,8 @@ import { useAssetsStore } from "../../zustand/store";
 import portfolioSum from "../../js-functions/portfolioSum";
 import portfolioSumFirstEntry from "../../js-functions/portfolioSumFirstEntry";
 import PieChartYears from "../charts/PieChart";
+import { useEffect } from "react";
+import getPortfolioData from "../../getDataApis";
 
 const StatisticsScreen = () => {
   const theme = useTheme();

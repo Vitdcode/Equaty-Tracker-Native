@@ -63,7 +63,7 @@ const PieChartYears = () => {
   const getYearFromDate = (dateStr) =>
     new Date(dateStr.split(".").reverse().join("-")).getFullYear();
 
-  const calculateYearlyGains = (allAssets) => {
+  const calculateYearlyGains = () => {
     const euroFormatter = new Intl.NumberFormat("de-DE", {
       style: "currency",
       currency: "EUR",
@@ -73,11 +73,10 @@ const PieChartYears = () => {
     const currentYear = new Date().getFullYear();
     const last5Years = Array.from({ length: 5 }, (_, i) => currentYear - i).reverse();
 
-    const filtered = allAssets
+    const filtered = assets
       .filter((a) => a.name === "General Assets")
       .map((a) => ({ ...a, year: getYearFromDate(a.date) }))
       .filter((a) => last5Years.includes(a.year));
-
     // Group by year
     const grouped = {};
     for (const asset of filtered) {
@@ -101,11 +100,11 @@ const PieChartYears = () => {
         if (!entries || entries.length < 2) return null;
 
         const sumAssets = (asset) =>
-          Object.values(asset.generalAssets).reduce((acc, val) => acc + val, 0);
-
-        const start = sumAssets(entries[0]);
-        const end = sumAssets(entries[entries.length - 1]);
-        const value = end.toFixed(0) - start.toFixed(0);
+          Object.values(asset.generalAssets).reduce((acc, val) => acc + parseFloat(val), 0);
+        const start = parseFloat(sumAssets(entries[0]));
+        const end = parseFloat(sumAssets(entries[entries.length - 1]));
+        if (!start || !end) return;
+        const value = end?.toFixed(0) - start?.toFixed(0);
 
         return {
           name: `€ | ${year}`,
@@ -151,7 +150,7 @@ const PieChartYears = () => {
     <View style={styles.chartContainer}>
       <Text style={styles.header}>Geld verdient pro Jahr</Text>
       <PieChart
-        data={calculateYearlyGains(assets)}
+        data={calculateYearlyGains()}
         width={screenWidth - 32} // Subtract some padding/margin
         height={220}
         chartConfig={chartConfig}

@@ -18,6 +18,7 @@ import PortfolioScreen from "./components/Screens/PortfolioScreen.jsx";
 import StatisticsScreen from "./components/Screens/StatisticsScreen.jsx";
 import BudgetScreen from "./components/Screens/BudgetScreen.jsx";
 import * as SystemUI from "expo-system-ui";
+import { useAssetsStore } from "./zustand/store.js";
 
 function SettingsScreen() {
   return (
