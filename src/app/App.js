@@ -1,32 +1,18 @@
-import { StatusBar } from "expo-status-bar";
-import { Easing, StyleSheet, Text, useColorScheme, View, Appearance } from "react-native";
-import { MD3DarkTheme, MD3LightTheme, PaperProvider, ThemeProvider } from "react-native-paper";
+import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createBottomTabNavigator,
-  SceneStyleInterpolators,
-  TransitionSpecs,
-} from "@react-navigation/bottom-tabs";
-import { BottomNavigation } from "react-native-paper";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as NavigationBar from "expo-navigation-bar";
-import Colors from "../constants/Colors.js";
 import merge from "deepmerge";
+import * as NavigationBar from "expo-navigation-bar";
+import { StatusBar } from "expo-status-bar";
+import * as SystemUI from "expo-system-ui";
 import { useEffect } from "react";
-import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Appearance, Easing, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { BottomNavigation, MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Colors from "../constants/Colors.js";
+import BudgetScreen from "./components/Screens/BudgetScreen.jsx";
 import PortfolioScreen from "./components/Screens/PortfolioScreen.jsx";
 import StatisticsScreen from "./components/Screens/StatisticsScreen.jsx";
-import BudgetScreen from "./components/Screens/BudgetScreen.jsx";
-import * as SystemUI from "expo-system-ui";
-import { useAssetsStore } from "./zustand/store.js";
-
-function SettingsScreen() {
-  return (
-    <View style={styles.screenContainer}>
-      <Text>Settings Screen</Text>
-    </View>
-  );
-}
 
 const CombinedLightTheme = merge(MD3LightTheme, { colors: Colors.light });
 const CombinedDarkTheme = merge(MD3DarkTheme, { colors: Colors.dark });
